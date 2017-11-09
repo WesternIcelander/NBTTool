@@ -12,7 +12,7 @@
     <import file="nbproject/build-impl.xml"/>
     <property name="locallib" value="lib" />
     <property name="remotelib" value="https://siggi.io/code/spigot" />
-    <target name="-pre-compile">
+    <target name="-pre-init">
         <mkdir dir="${locallib}" />
         <get src="${remotelib}/CraftBukkit_v1_7_R1.jar" dest="${locallib}/CraftBukkit_v1_7_R1.jar" skipexisting="true" />
         <get src="${remotelib}/CraftBukkit_v1_7_R2.jar" dest="${locallib}/CraftBukkit_v1_7_R2.jar" skipexisting="true" />
