@@ -23,10 +23,14 @@
  */
 package hk.siggi.bukkit.nbt.v1_8_R3;
 
+import com.mojang.authlib.GameProfile;
+import java.lang.reflect.Field;
 import net.minecraft.server.v1_8_R3.EntityInsentient;
 import net.minecraft.server.v1_8_R3.Item;
 import net.minecraft.server.v1_8_R3.NBTTagCompound;
 import net.minecraft.server.v1_8_R3.NBTTagList;
+import org.bukkit.block.Skull;
+import org.bukkit.craftbukkit.v1_8_R3.block.CraftSkull;
 import org.bukkit.craftbukkit.v1_8_R3.enchantments.CraftEnchantment;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
@@ -158,5 +162,16 @@ final class NBTUtil extends hk.siggi.bukkit.nbt.NBTUtil<NBTUtil, NBTCompound, NB
 	public String getEnchantmentName(Enchantment enchantment, int level) {
 		net.minecraft.server.v1_8_R3.Enchantment raw = CraftEnchantment.getRaw(enchantment);
 		return raw.d(level);
+	}
+
+	@Override
+	public void setGameProfile(Skull skull, GameProfile profile) {
+		try {
+			Field profileField = CraftSkull.class.getDeclaredField("profile");
+			profileField.setAccessible(true);
+			profileField.set(skull, profile);
+		} catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException t) {
+			throw new RuntimeException(t);
+		}
 	}
 }

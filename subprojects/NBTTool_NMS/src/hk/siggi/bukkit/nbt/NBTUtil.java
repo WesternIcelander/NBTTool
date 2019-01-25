@@ -23,8 +23,14 @@
  */
 package hk.siggi.bukkit.nbt;
 
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
+import com.mojang.authlib.properties.PropertyMap;
+import java.util.Map;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.block.Skull;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -197,12 +203,82 @@ public abstract class NBTUtil<F extends NBTUtil, C extends NBTCompound, L extend
 	 * @return name of the item stack
 	 */
 	public abstract String getItemName(ItemStack itemStack);
-	
+
 	/**
 	 * Get an enchantment name.
+	 *
 	 * @param enchantment the enchantment you want the name of
 	 * @param level the level of the enchantment you want the name of
 	 * @return the name of the enchantment
 	 */
 	public abstract String getEnchantmentName(Enchantment enchantment, int level);
+
+	/**
+	 * Create a player head with a GameProfile.
+	 *
+	 * @param profile the profile to use on the player head
+	 * @return
+	 */
+	public ItemStack createPlayerHead(GameProfile profile) {
+		C item = newCompound();
+		item.setByte("Count", (byte) 1);
+		item.setShort("Damage", (short) 3);
+		item.setShort("id", (short) 397);
+
+		C tag = newCompound();
+		item.setCompound("tag", tag);
+
+		C skullOwner = newCompound();
+		tag.setCompound("SkullOwner", skullOwner);
+
+		UUID id = profile.getId();
+		if (id != null) {
+			skullOwner.setString("Id", id.toString().toLowerCase());
+		}
+
+		String name = profile.getName();
+		if (name != null) {
+			skullOwner.setString("Name", name);
+		}
+
+		C properties = newCompound();
+		skullOwner.setCompound("Properties", properties);
+
+		Property textures = null;
+		PropertyMap props = profile.getProperties();
+		for (Map.Entry<String, Property> entry : props.entries()) {
+			if (entry.getKey().equals("textures")) {
+				textures = entry.getValue();
+				break;
+			}
+		}
+
+		if (textures != null) {
+			L texturesList = newList();
+			properties.setList("textures", texturesList);
+
+			C texturesCompound = newCompound();
+			texturesList.addCompound(texturesCompound);
+
+			String value = textures.getValue();
+			if (value != null) {
+				texturesCompound.setString("Value", value);
+			}
+
+			String signature = textures.getSignature();
+			if (signature != null) {
+				texturesCompound.setString("Signature", signature);
+			}
+		}
+
+		return itemFromNBT(item);
+	}
+
+	/**
+	 * Set the GameProfile for a player head.
+	 *
+	 * @param skull the player head to set the GameProfile for.
+	 * @param profile the profile to set it to.
+	 */
+	public abstract void setGameProfile(Skull skull, GameProfile profile);
 }

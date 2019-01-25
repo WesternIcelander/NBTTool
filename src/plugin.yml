@@ -1,8 +1,9 @@
 name: NBTTool
 main: hk.siggi.bukkit.nbt.NBTTool
-version: 1.0
+version: 1.1.0
 author: Siggi88
 description: Library for plugins to access NBT in ItemStacks.
+api-version: 1.13
 softdepend: [GsonBukkit]
 # GsonBukkit adds gson support to older servers, and is not
 # needed on Spigot v1_8_R2 (1.8.3) and higher.

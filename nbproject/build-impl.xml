@@ -930,32 +930,16 @@ is divided into following sections:
         </antcall>
         <antcall target="-maybe-call-dep">
             <param name="call.built.properties" value="${built-jar.properties}"/>
-            <param location="${project.NBTTool_v1_7_R1}" name="call.subproject"/>
-            <param location="${project.NBTTool_v1_7_R1}/build.xml" name="call.script"/>
+            <param location="${project.NBTTool_v1_13_R1}" name="call.subproject"/>
+            <param location="${project.NBTTool_v1_13_R1}/build.xml" name="call.script"/>
             <param name="call.target" value="jar"/>
             <param name="transfer.built-jar.properties" value="${built-jar.properties}"/>
             <param name="transfer.not.archive.disabled" value="true"/>
         </antcall>
         <antcall target="-maybe-call-dep">
             <param name="call.built.properties" value="${built-jar.properties}"/>
-            <param location="${project.NBTTool_v1_7_R2}" name="call.subproject"/>
-            <param location="${project.NBTTool_v1_7_R2}/build.xml" name="call.script"/>
-            <param name="call.target" value="jar"/>
-            <param name="transfer.built-jar.properties" value="${built-jar.properties}"/>
-            <param name="transfer.not.archive.disabled" value="true"/>
-        </antcall>
-        <antcall target="-maybe-call-dep">
-            <param name="call.built.properties" value="${built-jar.properties}"/>
-            <param location="${project.NBTTool_v1_7_R3}" name="call.subproject"/>
-            <param location="${project.NBTTool_v1_7_R3}/build.xml" name="call.script"/>
-            <param name="call.target" value="jar"/>
-            <param name="transfer.built-jar.properties" value="${built-jar.properties}"/>
-            <param name="transfer.not.archive.disabled" value="true"/>
-        </antcall>
-        <antcall target="-maybe-call-dep">
-            <param name="call.built.properties" value="${built-jar.properties}"/>
-            <param location="${project.NBTTool_v1_7_R4}" name="call.subproject"/>
-            <param location="${project.NBTTool_v1_7_R4}/build.xml" name="call.script"/>
+            <param location="${project.NBTTool_v1_13_R2}" name="call.subproject"/>
+            <param location="${project.NBTTool_v1_13_R2}/build.xml" name="call.script"/>
             <param name="call.target" value="jar"/>
             <param name="transfer.built-jar.properties" value="${built-jar.properties}"/>
             <param name="transfer.not.archive.disabled" value="true"/>
@@ -1519,32 +1503,16 @@ is divided into following sections:
         </antcall>
         <antcall target="-maybe-call-dep">
             <param name="call.built.properties" value="${built-clean.properties}"/>
-            <param location="${project.NBTTool_v1_7_R1}" name="call.subproject"/>
-            <param location="${project.NBTTool_v1_7_R1}/build.xml" name="call.script"/>
+            <param location="${project.NBTTool_v1_13_R1}" name="call.subproject"/>
+            <param location="${project.NBTTool_v1_13_R1}/build.xml" name="call.script"/>
             <param name="call.target" value="clean"/>
             <param name="transfer.built-clean.properties" value="${built-clean.properties}"/>
             <param name="transfer.not.archive.disabled" value="true"/>
         </antcall>
         <antcall target="-maybe-call-dep">
             <param name="call.built.properties" value="${built-clean.properties}"/>
-            <param location="${project.NBTTool_v1_7_R2}" name="call.subproject"/>
-            <param location="${project.NBTTool_v1_7_R2}/build.xml" name="call.script"/>
-            <param name="call.target" value="clean"/>
-            <param name="transfer.built-clean.properties" value="${built-clean.properties}"/>
-            <param name="transfer.not.archive.disabled" value="true"/>
-        </antcall>
-        <antcall target="-maybe-call-dep">
-            <param name="call.built.properties" value="${built-clean.properties}"/>
-            <param location="${project.NBTTool_v1_7_R3}" name="call.subproject"/>
-            <param location="${project.NBTTool_v1_7_R3}/build.xml" name="call.script"/>
-            <param name="call.target" value="clean"/>
-            <param name="transfer.built-clean.properties" value="${built-clean.properties}"/>
-            <param name="transfer.not.archive.disabled" value="true"/>
-        </antcall>
-        <antcall target="-maybe-call-dep">
-            <param name="call.built.properties" value="${built-clean.properties}"/>
-            <param location="${project.NBTTool_v1_7_R4}" name="call.subproject"/>
-            <param location="${project.NBTTool_v1_7_R4}/build.xml" name="call.script"/>
+            <param location="${project.NBTTool_v1_13_R2}" name="call.subproject"/>
+            <param location="${project.NBTTool_v1_13_R2}/build.xml" name="call.script"/>
             <param name="call.target" value="clean"/>
             <param name="transfer.built-clean.properties" value="${built-clean.properties}"/>
             <param name="transfer.not.archive.disabled" value="true"/>
