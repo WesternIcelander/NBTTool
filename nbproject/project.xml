@@ -69,6 +69,22 @@
                 <id>jar</id>
             </reference>
             <reference>
+                <foreign-project>NBTTool_v1_15_R1</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
+                <foreign-project>NBTTool_v1_16_R1</foreign-project>
+                <artifact-type>jar</artifact-type>
+                <script>build.xml</script>
+                <target>jar</target>
+                <clean-target>clean</clean-target>
+                <id>jar</id>
+            </reference>
+            <reference>
                 <foreign-project>NBTTool_v1_8_R1</foreign-project>
                 <artifact-type>jar</artifact-type>
                 <script>build.xml</script>

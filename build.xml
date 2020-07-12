@@ -25,6 +25,8 @@
         <get src="${remotelib}/Spigot_v1_13_R1.jar" dest="${locallib}/Spigot_v1_13_R1.jar" skipexisting="true" />
         <get src="${remotelib}/Spigot_v1_13_R2.jar" dest="${locallib}/Spigot_v1_13_R2.jar" skipexisting="true" />
         <get src="${remotelib}/Spigot_v1_14_R1.jar" dest="${locallib}/Spigot_v1_14_R1.jar" skipexisting="true" />
+        <get src="${remotelib}/Spigot_v1_15_R1.jar" dest="${locallib}/Spigot_v1_15_R1.jar" skipexisting="true" />
+        <get src="${remotelib}/Spigot_v1_16_R1.jar" dest="${locallib}/Spigot_v1_16_R1.jar" skipexisting="true" />
         <get src="${remotelib}/Spigot.jar" dest="${locallib}/Spigot.jar" skipexisting="true" />
     </target>
     <target name="-pre-jar">
@@ -40,6 +42,8 @@
         <unzip src="subprojects/NBTTool_v1_13_R1/dist/NBTTool_v1_13_R1.jar" dest="build/classes" />
         <unzip src="subprojects/NBTTool_v1_13_R2/dist/NBTTool_v1_13_R2.jar" dest="build/classes" />
         <unzip src="subprojects/NBTTool_v1_14_R1/dist/NBTTool_v1_14_R1.jar" dest="build/classes" />
+        <unzip src="subprojects/NBTTool_v1_15_R1/dist/NBTTool_v1_15_R1.jar" dest="build/classes" />
+        <unzip src="subprojects/NBTTool_v1_16_R1/dist/NBTTool_v1_16_R1.jar" dest="build/classes" />
         <delete file="build/classes/META-INF/MANIFEST.MF" />
     </target>
 </project>
