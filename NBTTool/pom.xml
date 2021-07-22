@@ -99,6 +99,16 @@
             <artifactId>NBTTool_v1_16_R1</artifactId>
             <version>1.1.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>io.siggi</groupId>
+            <artifactId>NBTTool_v1_16_R2</artifactId>
+            <version>1.1.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>io.siggi</groupId>
+            <artifactId>NBTTool_v1_16_R3</artifactId>
+            <version>1.1.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
