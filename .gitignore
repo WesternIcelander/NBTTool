@@ -1,7 +1,4 @@
 lib
-**/private
-**/dist
-**/build
-**/*.jar
-**/.DS_Store
+target
 .DS_Store
+dependency-reduced-pom.xml
