@@ -142,6 +142,7 @@
                             <artifact>*:*</artifact>
                             <excludes>
                                 <exclude>module-info.class</exclude>
+                                <exclude>**/module-info.class</exclude>
                                 <exclude>**/*.java</exclude>
                                 <exclude>**/*.SF</exclude>
                                 <exclude>**/*.DSA</exclude>
