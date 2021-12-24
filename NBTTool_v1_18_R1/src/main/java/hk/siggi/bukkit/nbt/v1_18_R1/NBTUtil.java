@@ -119,7 +119,7 @@ final class NBTUtil extends hk.siggi.bukkit.nbt.NBTUtil<NBTUtil, NBTCompound, NB
 		}
 		try {
 			DataFixer dataConverterManager = ((CraftServer) Bukkit.getServer()).getHandle().b().O;
-			NBTCompound tempItem = compound.clone();
+			NBTCompound tempItem = compound.copy();
 			NBTTagCompound nmsCompound = (NBTTagCompound) dataConverterManager.update(
 					DataConverterTypes.m,
 					new Dynamic(DynamicOpsNBT.a, tempItem.compound),

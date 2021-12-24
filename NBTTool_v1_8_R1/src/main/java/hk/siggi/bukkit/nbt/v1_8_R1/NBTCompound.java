@@ -197,7 +197,7 @@ final class NBTCompound extends hk.siggi.bukkit.nbt.NBTCompound<NBTCompound, NBT
 	}
 
 	@Override
-	public NBTCompound clone() {
+	public NBTCompound copy() {
 		return new NBTCompound((NBTTagCompound) compound.clone());
 	}
 }

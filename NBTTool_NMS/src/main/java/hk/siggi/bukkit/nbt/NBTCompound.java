@@ -34,7 +34,7 @@ import java.util.Set;
  * @param <C> the class implementing NBTCompound.
  * @param <L> the class implementing NBTList.
  */
-public abstract class NBTCompound<C extends NBTCompound, L extends NBTList> implements Cloneable {
+public abstract class NBTCompound<C extends NBTCompound, L extends NBTList> {
 
 	public abstract Object getNMSCompound();
 
@@ -90,6 +90,16 @@ public abstract class NBTCompound<C extends NBTCompound, L extends NBTList> impl
 
 	public abstract void remove(String key);
 
+	public abstract NBTCompound copy();
+
+	/**
+	 * This method is deprecated in favor of {@link NBTCompound#copy()}.
+	 *
+	 * @deprecated Use {@link NBTCompound#copy()} instead.
+	 */
 	@Override
-	public abstract NBTCompound clone();
+	@Deprecated
+	public NBTCompound clone() {
+		return copy();
+	}
 }

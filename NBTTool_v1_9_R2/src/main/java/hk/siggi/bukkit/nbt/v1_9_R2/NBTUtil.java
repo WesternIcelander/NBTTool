@@ -108,7 +108,7 @@ final class NBTUtil extends hk.siggi.bukkit.nbt.NBTUtil<NBTUtil, NBTCompound, NB
 		try {
 			int ver = compound.getInt("DataVersion");
 			DataConverterManager dataConverterManager = ((CraftServer) Bukkit.getServer()).getHandle().getServer().getDataConverterManager();
-			NBTCompound tempItem = compound.clone();
+			NBTCompound tempItem = compound.copy();
 			tempItem.remove("DataVersion");
 			NBTTagCompound nmsCompound = dataConverterManager.a((DataConverterType) DataConverterTypes.ITEM_INSTANCE, tempItem.getNMSCompound(), ver);
 			net.minecraft.server.v1_9_R2.ItemStack nmsStack = net.minecraft.server.v1_9_R2.ItemStack.createStack(nmsCompound);

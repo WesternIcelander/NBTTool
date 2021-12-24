@@ -285,7 +285,7 @@ final class NBTList extends hk.siggi.bukkit.nbt.NBTList<NBTCompound, NBTList> {
 	}
 
 	@Override
-	public NBTList clone() {
+	public NBTList copy() {
 		return new NBTList((NBTTagList) list.c());
 	}
 }

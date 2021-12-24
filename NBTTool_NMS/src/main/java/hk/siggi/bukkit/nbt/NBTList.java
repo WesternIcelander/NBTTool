@@ -32,7 +32,7 @@ package hk.siggi.bukkit.nbt;
  * @param <C> the class implementing NBTCompound.
  * @param <L> the class implementing NBTList.
  */
-public abstract class NBTList<C extends NBTCompound, L extends NBTList> implements Cloneable {
+public abstract class NBTList<C extends NBTCompound, L extends NBTList> {
 
 	public abstract Object getNMSList();
 
@@ -108,6 +108,16 @@ public abstract class NBTList<C extends NBTCompound, L extends NBTList> implemen
 
 	public abstract void remove(int key);
 
+	public abstract NBTList copy();
+
+	/**
+	 * This method is deprecated in favor of {@link NBTList#copy()}.
+	 *
+	 * @deprecated Use {@link NBTList#copy()} instead.
+	 */
 	@Override
-	public abstract NBTList clone();
+	@Deprecated
+	public NBTList clone() {
+		return copy();
+	}
 }
