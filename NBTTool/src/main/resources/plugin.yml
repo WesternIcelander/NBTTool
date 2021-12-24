@@ -1,6 +1,6 @@
 name: NBTTool
 main: hk.siggi.bukkit.nbt.NBTTool
-version: 1.2
+version: 1.3
 author: Siggi88
 description: Library for plugins to access NBT in ItemStacks.
 api-version: 1.13
