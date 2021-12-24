@@ -25,7 +25,8 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
-            <version>1.17.1-R0.1-SNAPSHOT</version>
+            <version>1.18.1-R0.1-SNAPSHOT</version>
+            <classifier>shaded</classifier>
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
@@ -112,6 +113,11 @@
         <dependency>
             <groupId>io.siggi</groupId>
             <artifactId>NBTTool_v1_17_R1</artifactId>
+            <version>1.1.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>io.siggi</groupId>
+            <artifactId>NBTTool_v1_18_R1</artifactId>
             <version>1.1.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
