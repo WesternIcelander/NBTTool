@@ -24,12 +24,19 @@
 package hk.siggi.bukkit.nbt.v1_9_R1;
 
 import com.mojang.authlib.GameProfile;
+import java.io.DataInputStream;
+import java.io.DataOutput;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import net.minecraft.server.v1_9_R1.DataConverterManager;
 import net.minecraft.server.v1_9_R1.DataConverterType;
 import net.minecraft.server.v1_9_R1.DataConverterTypes;
 import net.minecraft.server.v1_9_R1.EntityInsentient;
 import net.minecraft.server.v1_9_R1.Item;
+import net.minecraft.server.v1_9_R1.NBTCompressedStreamTools;
 import net.minecraft.server.v1_9_R1.NBTTagCompound;
 import net.minecraft.server.v1_9_R1.NBTTagList;
 import org.bukkit.Bukkit;
@@ -199,5 +206,17 @@ final class NBTUtil extends hk.siggi.bukkit.nbt.NBTUtil<NBTUtil, NBTCompound, NB
 		} catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException t) {
 			throw new RuntimeException(t);
 		}
+	}
+
+	@Override
+	public void serialize(OutputStream out, NBTCompound compound) throws IOException {
+		DataOutputStream dataOut = out instanceof DataOutputStream ? ((DataOutputStream) out) : new DataOutputStream(out);
+		NBTCompressedStreamTools.a(compound.getNMSCompound(), (DataOutput) dataOut);
+	}
+
+	@Override
+	public NBTCompound deserialize(InputStream in) throws IOException {
+		DataInputStream dataIn = in instanceof DataInputStream ? ((DataInputStream) in) : new DataInputStream(in);
+		return wrapCompound(NBTCompressedStreamTools.a(dataIn));
 	}
 }

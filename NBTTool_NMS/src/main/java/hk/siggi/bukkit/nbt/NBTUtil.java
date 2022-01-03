@@ -26,6 +26,9 @@ package hk.siggi.bukkit.nbt;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Map;
 import java.util.UUID;
 import org.bukkit.Bukkit;
@@ -281,4 +284,8 @@ public abstract class NBTUtil<F extends NBTUtil, C extends NBTCompound, L extend
 	 * @param profile the profile to set it to.
 	 */
 	public abstract void setGameProfile(Skull skull, GameProfile profile);
+
+	public abstract void serialize(OutputStream out, C compound) throws IOException;
+
+	public abstract C deserialize(InputStream in) throws IOException;
 }
