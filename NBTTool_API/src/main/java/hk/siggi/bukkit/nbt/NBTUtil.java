@@ -93,7 +93,9 @@ public abstract class NBTUtil<F extends NBTUtil, C extends NBTCompound, L extend
 	 * have one.
 	 * @return an {@link NBTCompound} containing the NBT tag of the item stack.
 	 */
-	public abstract C getTag(ItemStack stack);
+	public C getTag(ItemStack stack) {
+		throw new UnsupportedOperationException();
+	}
 
 	/**
 	 * Creates a copy of the specified {@link ItemStack} and sets the NBT Tag on
@@ -103,7 +105,9 @@ public abstract class NBTUtil<F extends NBTUtil, C extends NBTCompound, L extend
 	 * @param compound the NBT tag to set on the item.
 	 * @return an {@link ItemStack} with the newly set NBT tag.
 	 */
-	public abstract ItemStack setTag(ItemStack stack, C compound);
+	public ItemStack setTag(ItemStack stack, C compound) {
+		throw new UnsupportedOperationException();
+	}
 
 	/**
 	 * Serializes an {@link ItemStack} to an {@link NBTCompound}. NBTCompound
@@ -114,7 +118,9 @@ public abstract class NBTUtil<F extends NBTUtil, C extends NBTCompound, L extend
 	 * @param stack the {@link ItemStack} to serialize to NBT.
 	 * @return the ItemStack in it's NBT representation.
 	 */
-	public abstract C itemToNBT(ItemStack stack);
+	public C itemToNBT(ItemStack stack) {
+		throw new UnsupportedOperationException();
+	}
 
 	/**
 	 * Deserializes an {@link ItemStack} from an {@link NBTCompound}. Guaranteed
@@ -124,13 +130,17 @@ public abstract class NBTUtil<F extends NBTUtil, C extends NBTCompound, L extend
 	 * @param compound the ItemStack in it's NBT representation
 	 * @return the {@link ItemStack}
 	 */
-	public abstract ItemStack itemFromNBT(C compound);
+	public ItemStack itemFromNBT(C compound) {
+		throw new UnsupportedOperationException();
+	}
 
 	public abstract Class<C> getCompoundClass();
 
 	public abstract Class<L> getListClass();
 
-	public abstract Class<CItemStack> getCraftItemStack();
+	public Class<CItemStack> getCraftItemStack() {
+		throw new UnsupportedOperationException();
+	}
 
 	/**
 	 * 1.10 or higher only: Summon an entity almost as if done by the
@@ -184,7 +194,9 @@ public abstract class NBTUtil<F extends NBTUtil, C extends NBTCompound, L extend
 	 * @param itemStack the item stack you want to get the name of.
 	 * @return name of the item stack
 	 */
-	public abstract String getItemName(ItemStack itemStack);
+	public String getItemName(ItemStack itemStack) {
+		throw new UnsupportedOperationException();
+	}
 
 	/**
 	 * Get an enchantment name.
@@ -193,7 +205,9 @@ public abstract class NBTUtil<F extends NBTUtil, C extends NBTCompound, L extend
 	 * @param level the level of the enchantment you want the name of
 	 * @return the name of the enchantment
 	 */
-	public abstract String getEnchantmentName(Enchantment enchantment, int level);
+	public String getEnchantmentName(Enchantment enchantment, int level) {
+		throw new UnsupportedOperationException();
+	}
 
 	/**
 	 * Create a player head with a GameProfile.
@@ -262,7 +276,9 @@ public abstract class NBTUtil<F extends NBTUtil, C extends NBTCompound, L extend
 	 * @param skull the player head to set the GameProfile for.
 	 * @param profile the profile to set it to.
 	 */
-	public abstract void setGameProfile(Skull skull, GameProfile profile);
+	public void setGameProfile(Skull skull, GameProfile profile) {
+		throw new UnsupportedOperationException();
+	}
 
 	public abstract void serialize(OutputStream out, C compound) throws IOException;
 
