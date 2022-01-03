@@ -1,0 +1,72 @@
+/*
+ * The MIT License
+ *
+ * Copyright 2017 Siggi.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+package hk.siggi.bukkit.nbt;
+
+import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+import org.bukkit.inventory.ItemStack;
+
+class BukkitSerializer extends TypeAdapter<ItemStack> implements AdditionalSerializer {
+
+	private final NBTUtil util;
+	private final NBTJsonSerializer nbtSerializer;
+
+	BukkitSerializer(NBTJsonSerializer nbtSerializer, NBTUtil util) {
+		if (nbtSerializer == null || util == null) {
+			throw new NullPointerException();
+		}
+		this.nbtSerializer = nbtSerializer;
+		this.util = util;
+	}
+
+	@Override
+	public ItemStack read(JsonReader reader) throws IOException {
+		if (reader.peek() == JsonToken.NULL) {
+			reader.nextNull();
+			return null;
+		}
+		NBTCompound compound = nbtSerializer.read(reader);
+		return util.itemFromNBT(compound);
+	}
+
+	@Override
+	public void write(JsonWriter writer, ItemStack t) throws IOException {
+		if (t == null) {
+			writer.nullValue();
+			return;
+		}
+		NBTCompound compound = util.itemToNBT(t);
+		nbtSerializer.write(writer, compound);
+	}
+
+	@Override
+	public void registerTo(GsonBuilder gsonBuilder) {
+		gsonBuilder.registerTypeAdapter(ItemStack.class, this);
+		gsonBuilder.registerTypeAdapter(util.getCraftItemStack(), this);
+	}
+}

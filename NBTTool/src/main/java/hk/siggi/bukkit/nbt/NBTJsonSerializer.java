@@ -32,8 +32,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
-import org.bukkit.inventory.ItemStack;
 
 /**
  * This class is used to serialize and deserialize {@link NBTCompound}s to and
@@ -47,20 +47,19 @@ import org.bukkit.inventory.ItemStack;
 public class NBTJsonSerializer extends TypeAdapter<NBTCompound> {
 
 	private final NBTUtil util;
-	private final ItemStackSerializer stackSerializer;
+	final List<AdditionalSerializer> additionalSerializers = new ArrayList<>();
 
 	NBTJsonSerializer(NBTUtil util) {
 		if (util == null) {
 			throw new NullPointerException();
 		}
 		this.util = util;
-		this.stackSerializer = new ItemStackSerializer(this, util);
 	}
 
 	/**
 	 * Register this NBTJsonSerializer to the specified {@link GsonBuilder} so
 	 * that it can serialize and deserialize {@link NBTCompound}s and
-	 * {@link ItemStack}s.
+	 * bukkit ItemStacks when NBTTool is loaded as a Bukkit plugin.
 	 *
 	 * @param builder the GsonBuilder to register this
 	 * @return the same GsonBuilder passed in, for convenience.
@@ -68,8 +67,9 @@ public class NBTJsonSerializer extends TypeAdapter<NBTCompound> {
 	public GsonBuilder registerTo(GsonBuilder builder) {
 		builder.registerTypeAdapter(NBTCompound.class, this);
 		builder.registerTypeAdapter(util.getCompoundClass(), this);
-		builder.registerTypeAdapter(ItemStack.class, stackSerializer);
-		builder.registerTypeAdapter(util.getCraftItemStack(), stackSerializer);
+		for (AdditionalSerializer additionalSerializer : additionalSerializers) {
+			additionalSerializer.registerTo(builder);
+		}
 		return builder;
 	}
 
