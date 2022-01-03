@@ -1,5 +1,5 @@
 name: NBTTool
-main: hk.siggi.bukkit.nbt.NBTTool
+main: hk.siggi.bukkit.nbt.NBTToolPlugin
 version: ${project.version}
 author: Siggi88
 description: Library for plugins to access NBT in ItemStacks.

@@ -23,26 +23,19 @@
  */
 package hk.siggi.bukkit.nbt;
 
-import org.bukkit.plugin.java.JavaPlugin;
-
 /**
  * The main class for NBTTool, which provides two methods -- one to get NBTUtil,
  * and another to get NBTJsonSerializer.
  *
  * @author Siggi
  */
-public class NBTTool extends JavaPlugin {
+public class NBTTool {
 
-	/**
-	 * Bukkit calls this constructor when loading NBTTool, you should not use
-	 * this constructor yourself.
-	 */
-	public NBTTool() {
+	private NBTTool() {
 	}
 
-	private static NBTTool instance = null;
-	private NBTUtil nbtutil = null;
-	private NBTJsonSerializer serializer = null;
+	static NBTUtil nbtutil = null;
+	static NBTJsonSerializer serializer = null;
 
 	/**
 	 * Gets the {@link NBTUtil} to use, or null if the current server version is
@@ -51,10 +44,7 @@ public class NBTTool extends JavaPlugin {
 	 * @return an {@link NBTUtil}
 	 */
 	public static NBTUtil getUtil() {
-		if (instance == null) {
-			return null;
-		}
-		return instance.nbtutil;
+		return nbtutil;
 	}
 
 	/**
@@ -66,46 +56,6 @@ public class NBTTool extends JavaPlugin {
 	 * @return an {@link NBTJsonSerializer}
 	 */
 	public static NBTJsonSerializer getSerializer() {
-		if (instance == null) {
-			return null;
-		}
-		return instance.serializer;
-	}
-
-	/**
-	 * Called by Bukkit when the plugin is enabled, you shouldn't call this
-	 * method in your own plugin.
-	 */
-	@Override
-	public void onEnable() {
-		instance = this;
-		enable:
-		{
-			try {
-				nbtutil = NBTUtil.get();
-				if (nbtutil == null) {
-					break enable;
-				}
-				try {
-					serializer = new NBTJsonSerializer(this, nbtutil);
-				} catch (Exception e) {
-					System.err.println("Gson is not available, add Gson to the classpath to enable this feature!");
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				break enable;
-			}
-			return;
-		}
-		System.err.println("NBTTool does not support this server version!");
-		setEnabled(false);
-	}
-
-	/**
-	 * Called by Bukkit when the plugin is disabled, you shouldn't call this
-	 * method in your own plugin.
-	 */
-	@Override
-	public void onDisable() {
+		return serializer;
 	}
 }

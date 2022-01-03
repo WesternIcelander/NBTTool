@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Siggi.
+ * Copyright 2021 Siggi.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,43 +23,43 @@
  */
 package hk.siggi.bukkit.nbt;
 
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
-import com.google.gson.stream.JsonWriter;
-import java.io.IOException;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 
-class ItemStackSerializer extends TypeAdapter<ItemStack> {
+public class NBTToolPlugin extends JavaPlugin {
 
-	private final NBTUtil util;
-	private final NBTJsonSerializer nbtSerializer;
-
-	ItemStackSerializer(NBTJsonSerializer nbtSerializer, NBTUtil util) {
-		if (nbtSerializer == null || util == null) {
-			throw new NullPointerException();
-		}
-		this.nbtSerializer = nbtSerializer;
-		this.util = util;
-	}
-
+	/**
+	 * Called by Bukkit when the plugin is enabled, you shouldn't call this
+	 * method in your own plugin.
+	 */
 	@Override
-	public ItemStack read(JsonReader reader) throws IOException {
-		if (reader.peek() == JsonToken.NULL) {
-			reader.nextNull();
-			return null;
-		}
-		NBTCompound compound = nbtSerializer.read(reader);
-		return util.itemFromNBT(compound);
-	}
-
-	@Override
-	public void write(JsonWriter writer, ItemStack t) throws IOException {
-		if (t == null) {
-			writer.nullValue();
+	public void onEnable() {
+		enable:
+		{
+			try {
+				NBTTool.nbtutil = NBTUtil.get();
+				if (NBTTool.nbtutil == null) {
+					break enable;
+				}
+				try {
+					NBTTool.serializer = new NBTJsonSerializer(NBTTool.nbtutil);
+				} catch (Exception e) {
+					System.err.println("Gson is not available, add Gson to the classpath to enable this feature!");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				break enable;
+			}
 			return;
 		}
-		NBTCompound compound = util.itemToNBT(t);
-		nbtSerializer.write(writer, compound);
+		System.err.println("NBTTool does not support this server version!");
+		setEnabled(false);
+	}
+
+	/**
+	 * Called by Bukkit when the plugin is disabled, you shouldn't call this
+	 * method in your own plugin.
+	 */
+	@Override
+	public void onDisable() {
 	}
 }

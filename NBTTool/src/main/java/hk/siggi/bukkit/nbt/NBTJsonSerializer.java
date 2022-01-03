@@ -46,17 +46,15 @@ import org.bukkit.inventory.ItemStack;
  */
 public class NBTJsonSerializer extends TypeAdapter<NBTCompound> {
 
-	private final NBTTool tool;
 	private final NBTUtil util;
 	private final ItemStackSerializer stackSerializer;
 
-	NBTJsonSerializer(NBTTool tool, NBTUtil util) {
-		if (tool == null || util == null) {
+	NBTJsonSerializer(NBTUtil util) {
+		if (util == null) {
 			throw new NullPointerException();
 		}
-		this.tool = tool;
 		this.util = util;
-		this.stackSerializer = new ItemStackSerializer(this, tool, util);
+		this.stackSerializer = new ItemStackSerializer(this, util);
 	}
 
 	/**
