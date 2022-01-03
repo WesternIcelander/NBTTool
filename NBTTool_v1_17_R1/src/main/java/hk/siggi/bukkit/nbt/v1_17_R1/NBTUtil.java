@@ -42,7 +42,6 @@ import net.minecraft.nbt.NBTCompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.resources.MinecraftKey;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.WorldServer;
 import net.minecraft.util.datafix.fixes.DataConverterTypes;
 import net.minecraft.world.entity.EntityInsentient;
