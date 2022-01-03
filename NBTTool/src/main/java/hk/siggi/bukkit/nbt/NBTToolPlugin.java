@@ -23,7 +23,9 @@
  */
 package hk.siggi.bukkit.nbt;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import java.lang.reflect.Constructor;
 
 public class NBTToolPlugin extends JavaPlugin {
 
@@ -36,7 +38,8 @@ public class NBTToolPlugin extends JavaPlugin {
 		enable:
 		{
 			try {
-				NBTTool.nbtutil = NBTUtil.get();
+				NBTUtilFactory nbtUtilFactory = getNBTUtilFactory();
+				NBTTool.nbtutil = nbtUtilFactory.newInstance();
 				if (NBTTool.nbtutil == null) {
 					break enable;
 				}
@@ -62,5 +65,22 @@ public class NBTToolPlugin extends JavaPlugin {
 	 */
 	@Override
 	public void onDisable() {
+	}
+
+	static NBTUtilFactory getNBTUtilFactory() {
+		try {
+			Class<NBTUtilFactory> factoryClass = (Class<NBTUtilFactory>) Class.forName("hk.siggi.bukkit.nbt." + getVersion() + ".NBTUtilFactory");
+			Constructor<NBTUtilFactory> factoryConstructor = factoryClass.getDeclaredConstructor();
+			return factoryConstructor.newInstance();
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	private static String getVersion() {
+		String name = Bukkit.getServer().getClass().getName();
+		String version = name.substring(name.indexOf(".v") + 1);
+		version = version.substring(0, version.indexOf("."));
+		return version;
 	}
 }

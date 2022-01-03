@@ -56,27 +56,6 @@ import org.bukkit.inventory.ItemStack;
  */
 public abstract class NBTUtil<F extends NBTUtil, C extends NBTCompound, L extends NBTList, NMSCompound, NMSList, CItemStack> {
 
-	private static NBTUtil util = null;
-
-	static NBTUtil get() {
-		if (util == null) {
-			try {
-				Class<NBTUtilFactory> clazz = (Class<NBTUtilFactory>) Class.forName("hk.siggi.bukkit.nbt." + getVersion() + ".NBTUtilFactory");
-				NBTUtilFactory factory = clazz.newInstance();
-				util = factory.newInstance();
-			} catch (Exception e) {
-			}
-		}
-		return util;
-	}
-
-	private static String getVersion() {
-		String name = Bukkit.getServer().getClass().getName();
-		String version = name.substring(name.indexOf(".v") + 1);
-		version = version.substring(0, version.indexOf("."));
-		return version;
-	}
-
 	/**
 	 * Creates a new {@link NBTCompound} with no items in it.
 	 *
