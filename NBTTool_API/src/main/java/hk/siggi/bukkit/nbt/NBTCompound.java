@@ -84,6 +84,10 @@ public abstract class NBTCompound<C extends NBTCompound, L extends NBTList> {
 
 	public abstract void setIntArray(String key, int[] value);
 
+	public abstract long[] getLongArray(String key);
+
+	public abstract void setLongArray(String key, long[] value);
+
 	public abstract Set<String> keySet();
 
 	public abstract int size();

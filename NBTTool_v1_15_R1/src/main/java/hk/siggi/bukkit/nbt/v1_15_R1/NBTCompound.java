@@ -165,6 +165,16 @@ final class NBTCompound extends hk.siggi.bukkit.nbt.NBTCompound<NBTCompound, NBT
 	}
 
 	@Override
+	public long[] getLongArray(String key) {
+		return this.compound.getLongArray(key);
+	}
+
+	@Override
+	public void setLongArray(String key, long[] value) {
+		this.compound.a(key, value);
+	}
+
+	@Override
 	public Set<String> keySet() {
 		return this.compound.getKeys();
 	}

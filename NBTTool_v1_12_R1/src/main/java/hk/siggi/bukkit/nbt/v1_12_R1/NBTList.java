@@ -258,6 +258,21 @@ final class NBTList extends hk.siggi.bukkit.nbt.NBTList<NBTCompound, NBTList> {
 	}
 
 	@Override
+	public void addLongArray(long[] value) {
+		throw new UnsupportedOperationException("LongArray is only available in Minecraft 1.13 and newer.");
+	}
+
+	@Override
+	public long[] getLongArray(int key) {
+		throw new UnsupportedOperationException("LongArray is only available in Minecraft 1.13 and newer.");
+	}
+
+	@Override
+	public void setLongArray(int key, long[] value) {
+		throw new UnsupportedOperationException("LongArray is only available in Minecraft 1.13 and newer.");
+	}
+
+	@Override
 	public int size() {
 		return list.size();
 	}

@@ -33,6 +33,7 @@ import net.minecraft.server.v1_13_R1.NBTTagInt;
 import net.minecraft.server.v1_13_R1.NBTTagIntArray;
 import net.minecraft.server.v1_13_R1.NBTTagList;
 import net.minecraft.server.v1_13_R1.NBTTagLong;
+import net.minecraft.server.v1_13_R1.NBTTagLongArray;
 import net.minecraft.server.v1_13_R1.NBTTagShort;
 import net.minecraft.server.v1_13_R1.NBTTagString;
 
@@ -255,6 +256,24 @@ final class NBTList extends hk.siggi.bukkit.nbt.NBTList<NBTCompound, NBTList> {
 	@Override
 	public void setIntArray(int key, int[] value) {
 		list.a(key, new NBTTagIntArray(value));
+	}
+
+	@Override
+	public void addLongArray(long[] value) {
+		list.add(new NBTTagLongArray(value));
+	}
+
+	@Override
+	public long[] getLongArray(int key) {
+		if (list.get(key).getTypeId() != NBTType.LongArray.id) {
+			return new long[0];
+		}
+		return ((NBTTagLongArray) list.get(key)).d();
+	}
+
+	@Override
+	public void setLongArray(int key, long[] value) {
+		list.a(key, new NBTTagLongArray(value));
 	}
 
 	@Override

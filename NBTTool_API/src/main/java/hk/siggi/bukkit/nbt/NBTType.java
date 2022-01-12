@@ -36,7 +36,8 @@ public enum NBTType {
 	String(8),
 	List(9),
 	Compound(10),
-	IntArray(11);
+	IntArray(11),
+	LongArray(12);
 	public final int id;
 
 	private NBTType(int id) {

@@ -104,6 +104,12 @@ public abstract class NBTList<C extends NBTCompound, L extends NBTList> {
 
 	public abstract void setIntArray(int key, int[] value);
 
+	public abstract void addLongArray(long[] value);
+
+	public abstract long[] getLongArray(int key);
+
+	public abstract void setLongArray(int key, long[] value);
+
 	public abstract int size();
 
 	public abstract void remove(int key);

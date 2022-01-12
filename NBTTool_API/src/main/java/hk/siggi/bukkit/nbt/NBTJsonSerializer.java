@@ -186,6 +186,11 @@ public class NBTJsonSerializer extends TypeAdapter<NBTCompound> {
 						compound.setIntArray(key, readIntArray(reader));
 					}
 					break;
+				case LongArray:
+					if (token == JsonToken.BEGIN_ARRAY) {
+						compound.setLongArray(key, readLongArray(reader));
+					}
+					break;
 				default:
 					break;
 			}
@@ -245,6 +250,9 @@ public class NBTJsonSerializer extends TypeAdapter<NBTCompound> {
 				case IntArray:
 					requiredToken = JsonToken.BEGIN_ARRAY;
 					break;
+				case LongArray:
+					requiredToken = JsonToken.BEGIN_ARRAY;
+					break;
 				default:
 					requiredToken = null;
 					break;
@@ -290,6 +298,9 @@ public class NBTJsonSerializer extends TypeAdapter<NBTCompound> {
 					case IntArray:
 						list.addIntArray(readIntArray(reader));
 						break;
+					case LongArray:
+						list.addLongArray(readLongArray(reader));
+						break;
 					default:
 						break;
 				}
@@ -332,6 +343,25 @@ public class NBTJsonSerializer extends TypeAdapter<NBTCompound> {
 		int[] arr = new int[intArray.size()];
 		for (int i = 0; i < arr.length; i++) {
 			arr[i] = intArray.get(i);
+		}
+		return arr;
+	}
+
+	private long[] readLongArray(JsonReader reader) throws IOException {
+		ArrayList<Long> longArray = new ArrayList<>();
+		JsonToken peek;
+		reader.beginArray();
+		while ((peek = reader.peek()) != JsonToken.END_ARRAY) {
+			if (peek == JsonToken.NUMBER) {
+				longArray.add(reader.nextLong());
+			} else {
+				reader.skipValue();
+			}
+		}
+		reader.endArray();
+		long[] arr = new long[longArray.size()];
+		for (int i = 0; i < arr.length; i++) {
+			arr[i] = longArray.get(i);
 		}
 		return arr;
 	}
@@ -383,6 +413,9 @@ public class NBTJsonSerializer extends TypeAdapter<NBTCompound> {
 					break;
 				case IntArray:
 					writeIntArray(writer, compound.getIntArray(key));
+					break;
+				case LongArray:
+					writeLongArray(writer, compound.getLongArray(key));
 					break;
 				default:
 					writer.nullValue();
@@ -442,6 +475,9 @@ public class NBTJsonSerializer extends TypeAdapter<NBTCompound> {
 				case IntArray:
 					writeIntArray(writer, list.getIntArray(i));
 					break;
+				case LongArray:
+					writeLongArray(writer, list.getLongArray(i));
+					break;
 				default:
 					break;
 			}
@@ -458,6 +494,14 @@ public class NBTJsonSerializer extends TypeAdapter<NBTCompound> {
 	}
 
 	private void writeIntArray(JsonWriter writer, int[] array) throws IOException {
+		writer.beginArray();
+		for (int i = 0; i < array.length; i++) {
+			writer.value(array[i]);
+		}
+		writer.endArray();
+	}
+
+	private void writeLongArray(JsonWriter writer, long[] array) throws IOException {
 		writer.beginArray();
 		for (int i = 0; i < array.length; i++) {
 			writer.value(array[i]);

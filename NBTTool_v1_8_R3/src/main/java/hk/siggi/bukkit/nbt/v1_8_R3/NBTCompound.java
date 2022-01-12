@@ -165,6 +165,16 @@ final class NBTCompound extends hk.siggi.bukkit.nbt.NBTCompound<NBTCompound, NBT
 	}
 
 	@Override
+	public long[] getLongArray(String key) {
+		throw new UnsupportedOperationException("LongArray is only available in Minecraft 1.13 and newer.");
+	}
+
+	@Override
+	public void setLongArray(String key, long[] value) {
+		throw new UnsupportedOperationException("LongArray is only available in Minecraft 1.13 and newer.");
+	}
+
+	@Override
 	public Set<String> keySet() {
 		return this.compound.c();
 	}
