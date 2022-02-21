@@ -31,79 +31,140 @@ import java.util.Set;
  * method.
  *
  * @author Siggi
- * @param <C> the class implementing NBTCompound.
- * @param <L> the class implementing NBTList.
  */
-public abstract class NBTCompound<C extends NBTCompound, L extends NBTList> {
+public class NBTCompound {
 
-	public abstract Object getNMSCompound();
+	private final NBTCompound implementation;
 
-	public abstract int getType(String key);
+	public NBTCompound() {
+		try {
+			this.implementation = NBTTool.nbtutil.newCompound();
+		} catch (NullPointerException e) {
+			throw new UnsupportedOperationException();
+		}
+	}
 
-	public abstract byte getByte(String key);
+	protected NBTCompound(boolean impl) {
+		this.implementation = null;
+	}
 
-	public abstract void setByte(String key, byte value);
+	public <T> T getNMSCompound() {
+		return implementation.getNMSCompound();
+	}
 
-	public abstract short getShort(String key);
+	public int getType(String key) {
+		return implementation.getType(key);
+	}
 
-	public abstract void setShort(String key, short value);
+	public byte getByte(String key) {
+		return implementation.getByte(key);
+	}
 
-	public abstract int getInt(String key);
+	public void setByte(String key, byte value) {
+		implementation.setByte(key, value);
+	}
 
-	public abstract void setInt(String key, int value);
+	public short getShort(String key) {
+		return implementation.getShort(key);
+	}
 
-	public abstract long getLong(String key);
+	public void setShort(String key, short value) {
+		implementation.setShort(key, value);
+	}
 
-	public abstract void setLong(String key, long value);
+	public int getInt(String key) {
+		return implementation.getInt(key);
+	}
 
-	public abstract float getFloat(String key);
+	public void setInt(String key, int value) {
+		implementation.setInt(key, value);
+	}
 
-	public abstract void setFloat(String key, float value);
+	public long getLong(String key) {
+		return implementation.getLong(key);
+	}
 
-	public abstract double getDouble(String key);
+	public void setLong(String key, long value) {
+		implementation.setLong(key, value);
+	}
 
-	public abstract void setDouble(String key, double value);
+	public float getFloat(String key) {
+		return implementation.getFloat(key);
+	}
 
-	public abstract byte[] getByteArray(String key);
+	public void setFloat(String key, float value) {
+		implementation.setFloat(key, value);
+	}
 
-	public abstract void setByteArray(String key, byte[] value);
+	public double getDouble(String key) {
+		return implementation.getDouble(key);
+	}
 
-	public abstract String getString(String key);
+	public void setDouble(String key, double value) {
+		implementation.setDouble(key, value);
+	}
 
-	public abstract void setString(String key, String value);
+	public byte[] getByteArray(String key) {
+		return implementation.getByteArray(key);
+	}
 
-	public abstract L getList(String key);
+	public void setByteArray(String key, byte[] value) {
+		implementation.setByteArray(key, value);
+	}
 
-	public abstract void setList(String key, L value);
+	public String getString(String key) {
+		return implementation.getString(key);
+	}
 
-	public abstract C getCompound(String key);
+	public void setString(String key, String value) {
+		implementation.setString(key, value);
+	}
 
-	public abstract void setCompound(String key, C value);
+	public NBTList getList(String key) {
+		return implementation.getList(key);
+	}
 
-	public abstract int[] getIntArray(String key);
+	public void setList(String key, NBTList value) {
+		implementation.setList(key, value);
+	}
 
-	public abstract void setIntArray(String key, int[] value);
+	public NBTCompound getCompound(String key) {
+		return implementation.getCompound(key);
+	}
 
-	public abstract long[] getLongArray(String key);
+	public void setCompound(String key, NBTCompound value) {
+		implementation.setCompound(key, value);
+	}
 
-	public abstract void setLongArray(String key, long[] value);
+	public int[] getIntArray(String key) {
+		return implementation.getIntArray(key);
+	}
 
-	public abstract Set<String> keySet();
+	public void setIntArray(String key, int[] value) {
+		implementation.setIntArray(key, value);
+	}
 
-	public abstract int size();
+	public long[] getLongArray(String key) {
+		return implementation.getLongArray(key);
+	}
 
-	public abstract void remove(String key);
+	public void setLongArray(String key, long[] value) {
+		implementation.setLongArray(key, value);
+	}
 
-	public abstract NBTCompound copy();
+	public Set<String> keySet() {
+		return implementation.keySet();
+	}
 
-	/**
-	 * This method is deprecated in favor of {@link NBTCompound#copy()}.
-	 *
-	 * @deprecated Use {@link NBTCompound#copy()} instead.
-	 */
-	@Override
-	@Deprecated
-	public NBTCompound clone() {
-		return copy();
+	public int size() {
+		return implementation.size();
+	}
+
+	public void remove(String key) {
+		implementation.remove(key);
+	}
+
+	public NBTCompound copy() {
+		return implementation.copy();
 	}
 }

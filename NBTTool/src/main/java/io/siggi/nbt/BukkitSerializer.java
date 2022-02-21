@@ -28,8 +28,11 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
-import java.io.IOException;
+import io.siggi.nbt.util.AdditionalSerializer;
+import io.siggi.nbt.util.NBTJsonSerializer;
+import io.siggi.nbt.util.NBTUtil;
 import org.bukkit.inventory.ItemStack;
+import java.io.IOException;
 
 class BukkitSerializer extends TypeAdapter<ItemStack> implements AdditionalSerializer {
 

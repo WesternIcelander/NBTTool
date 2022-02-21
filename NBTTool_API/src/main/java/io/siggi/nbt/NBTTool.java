@@ -23,6 +23,14 @@
  */
 package io.siggi.nbt;
 
+import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
+import io.siggi.nbt.util.AdditionalSerializer;
+import io.siggi.nbt.util.NBTJsonSerializer;
+import io.siggi.nbt.util.NBTUtil;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The main class for NBTTool, which provides two methods -- one to get NBTUtil,
  * and another to get NBTJsonSerializer.
@@ -35,10 +43,19 @@ public class NBTTool {
 	}
 
 	static NBTUtil nbtutil = null;
-	static NBTJsonSerializer serializer = null;
+	static final NBTJsonSerializer serializer;
+	static final List<AdditionalSerializer> additionalSerializers = new ArrayList<>();
+	static {
+		NBTJsonSerializer s = null;
+		try {
+			s = new NBTJsonSerializer();
+		} catch (Exception e) {
+		}
+		serializer = s;
+	}
 
 	/**
-	 * Gets the {@link NBTUtil} to use, or null if the current server version is
+	 * Get the {@link NBTUtil} to use, or null if the current server version is
 	 * not supported.
 	 *
 	 * @return an {@link NBTUtil}
@@ -48,14 +65,28 @@ public class NBTTool {
 	}
 
 	/**
-	 * Gets the {@link NBTJsonSerializer} to use, or null if the current server
-	 * version is not supported. This is not available on pre-1.8.3 servers
-	 * unless you add Gson to the startup classpath, or install a plugin that
-	 * has Gson at com.google.gson and not in a shaded package path.
+	 * Get the {@link TypeAdapter} that can serialize and deserialize {@link NBTCompound}s.
 	 *
-	 * @return an {@link NBTJsonSerializer}
+	 * @return a {@link TypeAdapter}
 	 */
-	public static NBTJsonSerializer getSerializer() {
+	public static TypeAdapter<NBTCompound> getNBTCompoundTypeAdapter() {
 		return serializer;
+	}
+
+	/**
+	 * Register this NBTJsonSerializer to the specified {@link GsonBuilder} so
+	 * that it can serialize and deserialize {@link NBTCompound}s and
+	 * bukkit ItemStacks when NBTTool is loaded as a Bukkit plugin.
+	 *
+	 * @param builder the GsonBuilder to register this
+	 * @return the same GsonBuilder passed in, for convenience.
+	 */
+	public static GsonBuilder registerTo(GsonBuilder builder) {
+		builder.registerTypeAdapter(NBTCompound.class, serializer);
+		builder.registerTypeAdapter(nbtutil.getCompoundClass(), serializer);
+		for (AdditionalSerializer additionalSerializer : additionalSerializers) {
+			additionalSerializer.registerTo(builder);
+		}
+		return builder;
 	}
 }

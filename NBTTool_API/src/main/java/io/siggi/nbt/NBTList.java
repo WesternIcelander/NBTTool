@@ -29,101 +29,184 @@ package io.siggi.nbt;
  * method.
  *
  * @author Siggi
- * @param <C> the class implementing NBTCompound.
- * @param <L> the class implementing NBTList.
  */
-public abstract class NBTList<C extends NBTCompound, L extends NBTList> {
+public class NBTList {
 
-	public abstract Object getNMSList();
+	private final NBTList implementation;
 
-	public abstract int getType();
+	public NBTList() {
+		try {
+			this.implementation = NBTTool.nbtutil.newList();
+		} catch (NullPointerException e) {
+			throw new UnsupportedOperationException();
+		}
+	}
 
-	public abstract void addByte(byte value);
+	protected NBTList(boolean impl) {
+		this.implementation = null;
+	}
 
-	public abstract byte getByte(int key);
+	public <T> T getNMSList() {
+		return implementation.getNMSList();
+	}
 
-	public abstract void setByte(int key, byte value);
+	public int getType() {
+		return implementation.getType();
+	}
 
-	public abstract void addShort(short value);
+	public void addByte(byte value) {
+		implementation.addByte(value);
+	}
 
-	public abstract short getShort(int key);
+	public byte getByte(int key) {
+		return implementation.getByte(key);
+	}
 
-	public abstract void setShort(int key, short value);
+	public void setByte(int key, byte value) {
+		implementation.setByte(key, value);
+	}
 
-	public abstract void addInt(int value);
+	public void addShort(short value) {
+		implementation.addShort(value);
+	}
 
-	public abstract int getInt(int key);
+	public short getShort(int key) {
+		return implementation.getShort(key);
+	}
 
-	public abstract void setInt(int key, int value);
+	public void setShort(int key, short value) {
+		implementation.setShort(key, value);
+	}
 
-	public abstract void addLong(long value);
+	public void addInt(int value) {
+		implementation.addInt(value);
+	}
 
-	public abstract long getLong(int key);
+	public int getInt(int key) {
+		return implementation.getInt(key);
+	}
 
-	public abstract void setLong(int key, long value);
+	public void setInt(int key, int value) {
+		implementation.setInt(key, value);
+	}
 
-	public abstract void addFloat(float value);
+	public void addLong(long value) {
+		implementation.addLong(value);
+	}
 
-	public abstract float getFloat(int key);
+	public long getLong(int key) {
+		return implementation.getLong(key);
+	}
 
-	public abstract void setFloat(int key, float value);
+	public void setLong(int key, long value) {
+		implementation.setLong(key, value);
+	}
 
-	public abstract void addDouble(double value);
+	public void addFloat(float value) {
+		implementation.addFloat(value);
+	}
 
-	public abstract double getDouble(int key);
+	public float getFloat(int key) {
+		return implementation.getFloat(key);
+	}
 
-	public abstract void setDouble(int key, double value);
+	public void setFloat(int key, float value) {
+		implementation.setFloat(key, value);
+	}
 
-	public abstract void addByteArray(byte[] value);
+	public void addDouble(double value) {
+		implementation.addDouble(value);
+	}
 
-	public abstract byte[] getByteArray(int key);
+	public double getDouble(int key) {
+		return implementation.getDouble(key);
+	}
 
-	public abstract void setByteArray(int key, byte[] value);
+	public void setDouble(int key, double value) {
+		implementation.setDouble(key, value);
+	}
 
-	public abstract void addString(String value);
+	public void addByteArray(byte[] value) {
+		implementation.addByteArray(value);
+	}
 
-	public abstract String getString(int key);
+	public byte[] getByteArray(int key) {
+		return implementation.getByteArray(key);
+	}
 
-	public abstract void setString(int key, String value);
+	public void setByteArray(int key, byte[] value) {
+		implementation.setByteArray(key, value);
+	}
 
-	public abstract void addList(L value);
+	public void addString(String value) {
+		implementation.addString(value);
+	}
 
-	public abstract L getList(int key);
+	public String getString(int key) {
+		return implementation.getString(key);
+	}
 
-	public abstract void setList(int key, L value);
+	public void setString(int key, String value) {
+		implementation.setString(key, value);
+	}
 
-	public abstract void addCompound(C value);
+	public void addList(NBTList value) {
+		implementation.addList(value);
+	}
 
-	public abstract C getCompound(int key);
+	public NBTList getList(int key) {
+		return implementation.getList(key);
+	}
 
-	public abstract void setCompound(int key, C value);
+	public void setList(int key, NBTList value) {
+		implementation.setList(key, value);
+	}
 
-	public abstract void addIntArray(int[] value);
+	public void addCompound(NBTCompound value) {
+		implementation.addCompound(value);
+	}
 
-	public abstract int[] getIntArray(int key);
+	public NBTCompound getCompound(int key) {
+		return implementation.getCompound(key);
+	}
 
-	public abstract void setIntArray(int key, int[] value);
+	public void setCompound(int key, NBTCompound value) {
+		implementation.setCompound(key, value);
+	}
 
-	public abstract void addLongArray(long[] value);
+	public void addIntArray(int[] value) {
+		implementation.addIntArray(value);
+	}
 
-	public abstract long[] getLongArray(int key);
+	public int[] getIntArray(int key) {
+		return implementation.getIntArray(key);
+	}
 
-	public abstract void setLongArray(int key, long[] value);
+	public void setIntArray(int key, int[] value) {
+		implementation.setIntArray(key, value);
+	}
 
-	public abstract int size();
+	public void addLongArray(long[] value) {
+		implementation.addLongArray(value);
+	}
 
-	public abstract void remove(int key);
+	public long[] getLongArray(int key) {
+		return implementation.getLongArray(key);
+	}
 
-	public abstract NBTList copy();
+	public void setLongArray(int key, long[] value) {
+		implementation.setLongArray(key, value);
+	}
 
-	/**
-	 * This method is deprecated in favor of {@link NBTList#copy()}.
-	 *
-	 * @deprecated Use {@link NBTList#copy()} instead.
-	 */
-	@Override
-	@Deprecated
-	public NBTList clone() {
-		return copy();
+	public int size() {
+		return implementation.size();
+	}
+
+	public void remove(int key) {
+		implementation.remove(key);
+	}
+
+	public NBTList copy() {
+		return implementation.copy();
 	}
 }

@@ -23,6 +23,8 @@
  */
 package io.siggi.nbt;
 
+import io.siggi.nbt.util.NBTJsonSerializer;
+import io.siggi.nbt.util.NBTUtilFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.lang.reflect.Constructor;
@@ -44,8 +46,7 @@ public class NBTToolPlugin extends JavaPlugin {
 					break enable;
 				}
 				try {
-					NBTTool.serializer = new NBTJsonSerializer(NBTTool.nbtutil);
-					NBTTool.serializer.additionalSerializers.add(new BukkitSerializer(NBTTool.serializer, NBTTool.nbtutil));
+					NBTTool.additionalSerializers.add(new BukkitSerializer(NBTTool.serializer, NBTTool.nbtutil));
 				} catch (Exception e) {
 					getLogger().warning("Gson is not available, add Gson to the classpath to enable this feature!");
 				}
@@ -55,6 +56,7 @@ public class NBTToolPlugin extends JavaPlugin {
 			}
 			return;
 		}
+		NBTTool.nbtutil = null;
 		getLogger().severe("NBTTool does not support this server version!");
 		setEnabled(false);
 	}
@@ -69,7 +71,7 @@ public class NBTToolPlugin extends JavaPlugin {
 
 	static NBTUtilFactory getNBTUtilFactory() {
 		try {
-			Class<?> factoryClass = Class.forName("io.siggi.nbt." + getVersion() + ".NBTUtilFactory");
+			Class<?> factoryClass = Class.forName("io.siggi.nbt." + getVersion() + ".NBTUtilFactoryImpl");
 			Constructor<?> factoryConstructor = factoryClass.getDeclaredConstructor();
 			return (NBTUtilFactory) factoryConstructor.newInstance();
 		} catch (Exception e) {
