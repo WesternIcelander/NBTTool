@@ -58,7 +58,7 @@ final class NBTListImpl extends NBTList {
 	}
 
 	@Override
-	public int getType() {
+	public int getTypeId() {
 		return list.g();
 	}
 

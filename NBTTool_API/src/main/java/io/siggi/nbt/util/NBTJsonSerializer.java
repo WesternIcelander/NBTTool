@@ -29,7 +29,6 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import io.siggi.nbt.NBTCompound;
 import io.siggi.nbt.NBTList;
-import io.siggi.nbt.NBTTool;
 import io.siggi.nbt.NBTType;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -350,7 +349,7 @@ public class NBTJsonSerializer extends TypeAdapter<NBTCompound> {
 			String key = (String) keyO;
 			NBTType type;
 			try {
-				type = NBTType.getById(compound.getType(key));
+				type = NBTType.getById(compound.getTypeId(key));
 			} catch (Exception e) {
 				continue;
 			}
@@ -408,7 +407,7 @@ public class NBTJsonSerializer extends TypeAdapter<NBTCompound> {
 		}
 		NBTType type;
 		try {
-			type = NBTType.getById(list.getType());
+			type = NBTType.getById(list.getTypeId());
 		} catch (Exception e) {
 			writer.endArray();
 			return;

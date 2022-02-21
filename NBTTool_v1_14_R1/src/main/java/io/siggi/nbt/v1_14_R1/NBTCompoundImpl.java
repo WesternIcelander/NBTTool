@@ -50,7 +50,7 @@ final class NBTCompoundImpl extends NBTCompound {
 	}
 
 	@Override
-	public int getType(String key) {
+	public int getTypeId(String key) {
 		return compound.get(key).getTypeId();
 	}
 

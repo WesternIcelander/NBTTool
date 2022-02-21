@@ -50,8 +50,12 @@ public class NBTList {
 		return implementation.getNMSList();
 	}
 
-	public int getType() {
-		return implementation.getType();
+	public int getTypeId() {
+		return implementation.getTypeId();
+	}
+
+	public NBTType getType() {
+		return NBTType.getById(getTypeId());
 	}
 
 	public void addByte(byte value) {

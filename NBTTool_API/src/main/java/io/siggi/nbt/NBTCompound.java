@@ -52,8 +52,12 @@ public class NBTCompound {
 		return implementation.getNMSCompound();
 	}
 
-	public int getType(String key) {
-		return implementation.getType(key);
+	public int getTypeId(String key) {
+		return implementation.getTypeId(key);
+	}
+
+	public NBTType getType(String key) {
+		return NBTType.getById(getTypeId(key));
 	}
 
 	public byte getByte(String key) {
