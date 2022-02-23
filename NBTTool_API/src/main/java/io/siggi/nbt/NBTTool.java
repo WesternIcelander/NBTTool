@@ -25,6 +25,7 @@ package io.siggi.nbt;
 
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
+import io.siggi.nbt.impl.NBTUtilImpl;
 import io.siggi.nbt.util.AdditionalSerializer;
 import io.siggi.nbt.util.NBTJsonSerializer;
 import io.siggi.nbt.util.NBTUtil;
@@ -45,7 +46,7 @@ public class NBTTool {
 	private NBTTool() {
 	}
 
-	static NBTUtil nbtutil = null;
+	static NBTUtil nbtutil = new NBTUtilImpl();
 	static final NBTJsonSerializer serializer;
 	static final List<AdditionalSerializer> additionalSerializers = new ArrayList<>();
 	static {
