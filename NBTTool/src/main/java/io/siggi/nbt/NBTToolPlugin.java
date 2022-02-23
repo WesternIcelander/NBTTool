@@ -31,34 +31,39 @@ import java.lang.reflect.Constructor;
 
 public class NBTToolPlugin extends JavaPlugin {
 
+	private boolean loadSuccessful = false;
+
+	@Override
+	public void onLoad() {
+		try {
+			NBTUtilFactory nbtUtilFactory = getNBTUtilFactory();
+			NBTTool.nbtutil = nbtUtilFactory.newInstance();
+			if (NBTTool.nbtutil == null) {
+				return;
+			}
+			try {
+				NBTTool.additionalSerializers.add(new BukkitSerializer(NBTTool.serializer, NBTTool.nbtutil));
+			} catch (Exception e) {
+				getLogger().warning("Gson is not available, add Gson to the classpath to enable this feature!");
+			}
+		} catch (Exception e) {
+			NBTTool.nbtutil = null;
+			e.printStackTrace();
+			return;
+		}
+		loadSuccessful = true;
+	}
+
 	/**
 	 * Called by Bukkit when the plugin is enabled, you shouldn't call this
 	 * method in your own plugin.
 	 */
 	@Override
 	public void onEnable() {
-		enable:
-		{
-			try {
-				NBTUtilFactory nbtUtilFactory = getNBTUtilFactory();
-				NBTTool.nbtutil = nbtUtilFactory.newInstance();
-				if (NBTTool.nbtutil == null) {
-					break enable;
-				}
-				try {
-					NBTTool.additionalSerializers.add(new BukkitSerializer(NBTTool.serializer, NBTTool.nbtutil));
-				} catch (Exception e) {
-					getLogger().warning("Gson is not available, add Gson to the classpath to enable this feature!");
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				break enable;
-			}
-			return;
+		if (!loadSuccessful) {
+			getLogger().severe("NBTTool does not support this server version!");
+			setEnabled(false);
 		}
-		NBTTool.nbtutil = null;
-		getLogger().severe("NBTTool does not support this server version!");
-		setEnabled(false);
 	}
 
 	/**
