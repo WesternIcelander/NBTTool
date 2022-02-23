@@ -45,11 +45,8 @@ public enum NBTType {
 	}
 
 	public static NBTType getById(int id) {
-		for (NBTType type : values()) {
-			if (type.id == id) {
-				return type;
-			}
-		}
-		return null;
+		NBTType[] values = values();
+		if (id < 0 || id >= values.length) throw new IllegalArgumentException("Unknown NBT type " + id);
+		return values[id];
 	}
 }
