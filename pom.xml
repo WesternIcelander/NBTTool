@@ -9,7 +9,7 @@
 
     <modules>
         <module>NBTTool</module>
-        <module>NBTTool_API</module>
+        <module>NBTToolBukkit</module>
         <module>NBTTool_v1_8_R1</module>
         <module>NBTTool_v1_8_R2</module>
         <module>NBTTool_v1_8_R3</module>
