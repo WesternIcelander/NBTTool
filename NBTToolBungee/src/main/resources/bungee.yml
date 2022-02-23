@@ -1,0 +1,5 @@
+name: NBTTool
+main: io.siggi.nbt.NBTToolBungee
+version: ${project.version}
+author: Siggi88
+description: Library for plugins to handle NBT data.

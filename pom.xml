@@ -10,6 +10,8 @@
     <modules>
         <module>NBTTool</module>
         <module>NBTToolBukkit</module>
+        <module>NBTToolBungee</module>
+        <module>NBTToolPlugin</module>
         <module>NBTTool_v1_8_R1</module>
         <module>NBTTool_v1_8_R2</module>
         <module>NBTTool_v1_8_R3</module>
