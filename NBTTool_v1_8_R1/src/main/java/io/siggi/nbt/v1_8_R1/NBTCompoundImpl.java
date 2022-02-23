@@ -51,7 +51,11 @@ final class NBTCompoundImpl extends NBTCompound {
 
 	@Override
 	public int getTypeId(String key) {
-		return compound.get(key).getTypeId();
+		try {
+			return compound.get(key).getTypeId();
+		} catch (NullPointerException e) {
+			return 0;
+		}
 	}
 
 	@Override
