@@ -55,10 +55,10 @@ public class NBTUtil {
 	}
 
 	public void serialize(OutputStream out, NBTCompound compound) throws IOException {
-		NBTToolBukkit.serialize(out, compound.unwrap());
+		io.siggi.nbt.NBTTool.serialize(out, compound.unwrap());
 	}
 
 	public NBTCompound deserialize(InputStream in) throws IOException {
-		return new NBTCompound(NBTToolBukkit.deserialize(in));
+		return new NBTCompound(io.siggi.nbt.NBTTool.deserialize(in));
 	}
 }

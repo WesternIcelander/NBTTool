@@ -1,22 +1,14 @@
 package io.siggi.nbt;
 
 import com.mojang.authlib.GameProfile;
-import io.siggi.nbt.util.NBTUtil;
 import org.bukkit.block.Skull;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+
+import static io.siggi.nbt.NBTTool.getUtil;
 
 public class NBTToolBukkit {
 	private NBTToolBukkit() {
-	}
-
-	private static NBTUtil getUtil() {
-		if (NBTTool.nbtutil == null)
-			throw new UnsupportedOperationException();
-		return NBTTool.nbtutil;
 	}
 
 	/**
@@ -106,13 +98,5 @@ public class NBTToolBukkit {
 	 */
 	public static void setGameProfile(Skull skull, GameProfile profile) {
 		getUtil().setGameProfile(skull, profile);
-	}
-
-	public static void serialize(OutputStream out, NBTCompound compound) throws IOException {
-		getUtil().serialize(out, compound);
-	}
-
-	public static NBTCompound deserialize(InputStream in) throws IOException {
-		return getUtil().deserialize(in);
 	}
 }

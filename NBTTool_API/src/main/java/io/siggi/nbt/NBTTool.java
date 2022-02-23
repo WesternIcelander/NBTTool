@@ -28,6 +28,9 @@ import com.google.gson.TypeAdapter;
 import io.siggi.nbt.util.AdditionalSerializer;
 import io.siggi.nbt.util.NBTJsonSerializer;
 import io.siggi.nbt.util.NBTUtil;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,13 +57,9 @@ public class NBTTool {
 		serializer = s;
 	}
 
-	/**
-	 * Get the {@link NBTUtil} to use, or null if the current server version is
-	 * not supported.
-	 *
-	 * @return an {@link NBTUtil}
-	 */
-	public static NBTUtil getUtil() {
+	static NBTUtil getUtil() {
+		if (nbtutil == null)
+			throw new UnsupportedOperationException();
 		return nbtutil;
 	}
 
@@ -88,5 +87,13 @@ public class NBTTool {
 			additionalSerializer.registerTo(builder);
 		}
 		return builder;
+	}
+
+	public static void serialize(OutputStream out, NBTCompound compound) throws IOException {
+		getUtil().serialize(out, compound);
+	}
+
+	public static NBTCompound deserialize(InputStream in) throws IOException {
+		return getUtil().deserialize(in);
 	}
 }
