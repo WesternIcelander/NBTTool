@@ -55,7 +55,10 @@ public class NBTList {
 	}
 
 	public NBTType getType() {
-		return NBTType.getById(getTypeId());
+		int id = getTypeId();
+		if (id == 0)
+			return null;
+		return NBTType.getById(id);
 	}
 
 	public void addByte(byte value) {

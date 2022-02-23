@@ -57,7 +57,10 @@ public class NBTCompound {
 	}
 
 	public NBTType getType(String key) {
-		return NBTType.getById(getTypeId(key));
+		int id = getTypeId(key);
+		if (id == 0)
+			return null;
+		return NBTType.getById(id);
 	}
 
 	public byte getByte(String key) {
