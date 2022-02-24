@@ -24,6 +24,7 @@
 package io.siggi.nbt;
 
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * This class is a wrapper for the NMS NBTTagCompound. All the methods in here
@@ -157,6 +158,44 @@ public class NBTCompound {
 
 	public void setLongArray(String key, long[] value) {
 		implementation.setLongArray(key, value);
+	}
+
+	/**
+	 * Get a UUID by reading it from an int array of 4 ints which is how UUIDs are stored in Minecraft 1.16 and newer.
+	 *
+	 * @param key the key to read from
+	 * @return a UUID or null if the value is not an int array of 4 ints.
+	 */
+	public UUID getUUID(String key) {
+		try {
+			int[] intArray = getIntArray(key);
+			if (intArray.length != 4)
+				return null;
+			return new UUID(
+					(((long) intArray[0]) << 32) | ((long) intArray[1]),
+					(((long) intArray[2]) << 32) | ((long) intArray[3])
+			);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	/**
+	 * Store a UUID by writing it as an int array of 4 ints, which is how UUIDs are stored in Minecraft 1.16 and newer.
+	 *
+	 * @param key the key to store to
+	 * @param value the UUIID to store
+	 */
+	public void setUUID(String key, UUID value) {
+		long mostSignificant = value.getMostSignificantBits();
+		long leastSignificant = value.getLeastSignificantBits();
+		int[] intArray = new int[]{
+				(int) ((mostSignificant >> 32) & 0xffffffffL),
+				(int) (mostSignificant & 0xffffffffL),
+				(int) ((leastSignificant >> 32) & 0xffffffffL),
+				(int) (leastSignificant & 0xffffffffL)
+		};
+		setIntArray(key, intArray);
 	}
 
 	public Set<String> keySet() {
