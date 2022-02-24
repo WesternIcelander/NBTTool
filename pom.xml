@@ -4,7 +4,7 @@
 
     <groupId>io.siggi</groupId>
     <artifactId>NBTTool-parent</artifactId>
-    <version>1.4-SNAPSHOT</version>
+    <version>1.4</version>
     <packaging>pom</packaging>
 
     <modules>
