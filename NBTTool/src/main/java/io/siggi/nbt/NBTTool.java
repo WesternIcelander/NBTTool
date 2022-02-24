@@ -29,6 +29,8 @@ import io.siggi.nbt.impl.NBTUtilImpl;
 import io.siggi.nbt.util.AdditionalSerializer;
 import io.siggi.nbt.util.NBTJsonSerializer;
 import io.siggi.nbt.util.NBTUtil;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -89,7 +91,25 @@ public class NBTTool {
 		getUtil().serialize(out, compound);
 	}
 
+	public static byte[] serialize(NBTCompound compound) {
+		try {
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			serialize(out, compound);
+			return out.toByteArray();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	public static NBTCompound deserialize(InputStream in) throws IOException {
 		return getUtil().deserialize(in);
+	}
+
+	public static NBTCompound deserialize(byte[] data) {
+		try {
+			return deserialize(new ByteArrayInputStream(data));
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }
