@@ -35,12 +35,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * The main class for NBTTool, which provides two methods -- one to get NBTUtil,
- * and another to get NBTJsonSerializer.
- *
- * @author Siggi
- */
 public class NBTTool {
 
 	private NBTTool() {
