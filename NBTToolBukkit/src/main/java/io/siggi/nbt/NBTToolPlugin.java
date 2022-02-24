@@ -42,8 +42,8 @@ public class NBTToolPlugin extends JavaPlugin {
 				return;
 			}
 			try {
-				NBTTool.additionalSerializers.add(new BukkitSerializer(NBTTool.serializer, NBTTool.nbtutil));
-			} catch (Exception e) {
+				NBTTool.additionalSerializers.add(new BukkitSerializer((NBTJsonSerializer) NBTTool.serializer, NBTTool.nbtutil));
+			} catch (Throwable t) {
 				getLogger().warning("Gson is not available, add Gson to the classpath to enable this feature!");
 			}
 		} catch (Exception e) {

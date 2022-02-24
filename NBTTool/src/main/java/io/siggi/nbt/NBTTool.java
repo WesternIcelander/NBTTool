@@ -41,13 +41,13 @@ public class NBTTool {
 	}
 
 	static NBTUtil nbtutil = new NBTUtilImpl();
-	static final NBTJsonSerializer serializer;
+	static final Object serializer;
 	static final List<AdditionalSerializer> additionalSerializers = new ArrayList<>();
 	static {
-		NBTJsonSerializer s = null;
+		Object s = null;
 		try {
 			s = new NBTJsonSerializer();
-		} catch (Exception e) {
+		} catch (Throwable t) {
 		}
 		serializer = s;
 	}
@@ -63,8 +63,9 @@ public class NBTTool {
 	 *
 	 * @return a {@link TypeAdapter}
 	 */
+	@SuppressWarnings("unchecked")
 	public static TypeAdapter<NBTCompound> getNBTCompoundTypeAdapter() {
-		return serializer;
+		return (TypeAdapter<NBTCompound>) serializer;
 	}
 
 	/**
