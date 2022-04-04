@@ -5,13 +5,13 @@
     <parent>
         <groupId>io.siggi</groupId>
         <artifactId>NBTTool-parent</artifactId>
-        <version>1.5</version>
+        <version>1.6-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>io.siggi</groupId>
     <artifactId>NBTToolPlugin</artifactId>
-    <version>1.5</version>
+    <version>1.6-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -23,12 +23,12 @@
         <dependency>
             <groupId>io.siggi</groupId>
             <artifactId>NBTToolBukkit</artifactId>
-            <version>1.5</version>
+            <version>1.6-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>io.siggi</groupId>
             <artifactId>NBTToolBungee</artifactId>
-            <version>1.5</version>
+            <version>1.6-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
