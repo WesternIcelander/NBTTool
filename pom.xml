@@ -9,6 +9,7 @@
 
     <modules>
         <module>NBTTool</module>
+        <module>NBTToolUtility</module>
         <module>NBTToolBukkit</module>
         <module>NBTToolBungee</module>
         <module>NBTToolPlugin</module>
