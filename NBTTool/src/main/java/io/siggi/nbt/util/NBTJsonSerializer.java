@@ -342,11 +342,7 @@ public class NBTJsonSerializer extends TypeAdapter<NBTCompound> {
 
 	private void writeCompound(JsonWriter writer, NBTCompound compound) throws IOException {
 		writer.beginObject();
-		Set<String> theKeySet = compound.keySet();
-		String[] keySetArray = theKeySet.toArray(new String[theKeySet.size()]);
-		Arrays.sort(keySetArray);
-		for (Object keyO : keySetArray) {
-			String key = (String) keyO;
+		for (String key : compound.keySet()) {
 			NBTType type;
 			try {
 				type = NBTType.getById(compound.getTypeId(key));
