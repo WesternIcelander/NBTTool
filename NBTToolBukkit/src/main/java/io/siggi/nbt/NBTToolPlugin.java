@@ -31,27 +31,28 @@ import java.lang.reflect.Constructor;
 
 public class NBTToolPlugin extends JavaPlugin {
 
-	private boolean loadSuccessful = false;
-
-	@Override
-	public void onLoad() {
+	private static boolean loadSuccessful = false;
+	static {
+		tryBlock:
 		try {
 			NBTUtilFactory nbtUtilFactory = getNBTUtilFactory();
 			NBTTool.nbtutil = nbtUtilFactory.newInstance();
 			if (NBTTool.nbtutil == null) {
-				return;
+				break tryBlock;
 			}
 			try {
 				NBTTool.additionalSerializers.add(new BukkitSerializer((NBTJsonSerializer) NBTTool.serializer, NBTTool.nbtutil));
 			} catch (Throwable t) {
-				getLogger().warning("Gson is not available, add Gson to the classpath to enable this feature!");
 			}
+			loadSuccessful = true;
 		} catch (Exception e) {
 			NBTTool.nbtutil = null;
 			e.printStackTrace();
-			return;
 		}
-		loadSuccessful = true;
+	}
+
+	@Override
+	public void onLoad() {
 	}
 
 	/**
