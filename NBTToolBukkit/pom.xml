@@ -128,6 +128,11 @@
             <artifactId>NBTTool_v1_19_R1</artifactId>
             <version>1.7-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>io.siggi</groupId>
+            <artifactId>NBTTool_v1_19_R2</artifactId>
+            <version>1.7-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>

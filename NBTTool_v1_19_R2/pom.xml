@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>io.siggi</groupId>
-    <artifactId>NBTTool_v1_19_R1</artifactId>
+    <artifactId>NBTTool_v1_19_R2</artifactId>
     <version>1.7-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -34,7 +34,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
-            <version>1.19.2-R0.1-SNAPSHOT</version>
+            <version>1.19.3-R0.1-SNAPSHOT</version>
             <classifier>shaded</classifier>
             <scope>provided</scope>
             <exclusions>
