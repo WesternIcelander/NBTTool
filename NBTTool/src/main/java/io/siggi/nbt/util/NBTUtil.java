@@ -23,12 +23,19 @@
  */
 package io.siggi.nbt.util;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
 import io.siggi.nbt.NBTCompound;
 import io.siggi.nbt.NBTList;
 import io.siggi.nbt.NBTTool;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Collections;
+import java.util.HashMap;
 import org.bukkit.Location;
 import org.bukkit.block.Skull;
 import org.bukkit.command.CommandSender;
@@ -51,6 +58,8 @@ import java.util.UUID;
  * @author Siggi
  */
 public abstract class NBTUtil {
+
+	private Map<String,String> enUsTranslations;
 
 	/**
 	 * Creates a new {@link NBTCompound} with no items in it.
@@ -236,6 +245,51 @@ public abstract class NBTUtil {
 	 */
 	public String getTranslatableEnchantmentName(Enchantment enchantment) {
 		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * Get the Minecraft translations in US English.
+	 *
+	 * @return the Minecraft translations in US English.
+	 */
+	public Map<String,String> getMojangUSEnglishTranslations() {
+		if (enUsTranslations == null) {
+			enUsTranslations = Collections.unmodifiableMap(doGetMojangUSEnglishTranslations());
+		}
+		return enUsTranslations;
+	}
+
+	protected Map<String,String> doGetMojangUSEnglishTranslations() {
+		throw new UnsupportedOperationException();
+	}
+
+	protected Map<String,String> readJsonLanguage(InputStream in) {
+		Map<String,String> map = new HashMap<>();
+		JsonObject object = new JsonParser().parse(new InputStreamReader(in)).getAsJsonObject();
+		for (String key : object.keySet()) {
+			try {
+				String value = object.get(key).getAsString();
+				map.put(key, value);
+			} catch (Exception ignored) {
+			}
+		}
+		return map;
+	}
+
+	protected Map<String,String> readPropertiesLanguage(InputStream in) {
+		Map<String,String> map = new HashMap<>();
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				int equalPos = line.indexOf("=");
+				if (equalPos == -1) continue;
+				String key = line.substring(0, equalPos);
+				String value = line.substring(equalPos + 1);
+				map.put(key, value);
+			}
+		} catch (IOException ignored) {
+		}
+		return map;
 	}
 
 	/**

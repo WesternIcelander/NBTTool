@@ -29,6 +29,7 @@ import io.siggi.nbt.NBTList;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.serialization.Dynamic;
 import io.siggi.nbt.util.NBTUtil;
+import java.util.Map;
 import net.minecraft.server.v1_16_R3.DataConverterTypes;
 import net.minecraft.server.v1_16_R3.DynamicOpsNBT;
 import net.minecraft.server.v1_16_R3.EntityInsentient;
@@ -36,6 +37,7 @@ import net.minecraft.server.v1_16_R3.EntityTypes;
 import net.minecraft.server.v1_16_R3.IRegistry;
 import net.minecraft.server.v1_16_R3.Item;
 import net.minecraft.server.v1_16_R3.MinecraftKey;
+import net.minecraft.server.v1_16_R3.MinecraftServer;
 import net.minecraft.server.v1_16_R3.NBTCompressedStreamTools;
 import net.minecraft.server.v1_16_R3.NBTTagCompound;
 import net.minecraft.server.v1_16_R3.NBTTagList;
@@ -244,6 +246,11 @@ final class NBTUtilImpl extends NBTUtil {
 	public String getTranslatableEnchantmentName(Enchantment enchantment) {
 		net.minecraft.server.v1_16_R3.Enchantment raw = CraftEnchantment.getRaw(enchantment);
 		return raw.g();
+	}
+
+	@Override
+	protected Map<String,String> doGetMojangUSEnglishTranslations() {
+		return readJsonLanguage(MinecraftServer.class.getResourceAsStream("/assets/minecraft/lang/en_us.json"));
 	}
 
 	@Override
