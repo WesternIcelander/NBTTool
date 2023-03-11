@@ -130,14 +130,18 @@ final class NBTUtilImpl extends NBTUtil {
 		return CraftItemStack.class;
 	}
 
-	@Override
-	public String getItemName(ItemStack stack) {
-		net.minecraft.server.v1_8_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
+	private Item getItem(net.minecraft.server.v1_8_R1.ItemStack nmsStack) {
 		NBTTagCompound nbttc = new NBTTagCompound();
 		nmsStack.save(nbttc);
 		NBTCompound compound = wrapCompound(nbttc);
 		String id = compound.getString("id");
-		Item item = Item.d(id);
+		return Item.d(id);
+	}
+
+	@Override
+	public String getItemName(ItemStack stack) {
+		net.minecraft.server.v1_8_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
+		Item item = getItem(nmsStack);
 		if (item == null) {
 			return "null";
 		} else {
@@ -146,9 +150,26 @@ final class NBTUtilImpl extends NBTUtil {
 	}
 
 	@Override
+	public String getTranslatableItemName(ItemStack stack) {
+		net.minecraft.server.v1_8_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
+		Item item = getItem(nmsStack);
+		if (item == null) {
+			return "null";
+		} else {
+			return item.e_(nmsStack) + ".name";
+		}
+	}
+
+	@Override
 	public String getEnchantmentName(Enchantment enchantment, int level) {
 		net.minecraft.server.v1_8_R1.Enchantment raw = CraftEnchantment.getRaw(enchantment);
 		return raw.d(level);
+	}
+
+	@Override
+	public String getTranslatableEnchantmentName(Enchantment enchantment) {
+		net.minecraft.server.v1_8_R1.Enchantment raw = CraftEnchantment.getRaw(enchantment);
+		return raw.a();
 	}
 
 	@Override

@@ -189,23 +189,52 @@ public abstract class NBTUtil {
 	}
 
 	/**
-	 * Get the name of an item stack.
+	 * Get the name of an item stack in US English. If you need the name in another language, use
+	 * {@link #getTranslatableItemName(ItemStack)} to get a translatable string and pass that to an I18n library.
 	 *
 	 * @param itemStack the item stack you want to get the name of.
 	 * @return name of the item stack
+	 * @see #getTranslatableItemName(ItemStack)
 	 */
 	public String getItemName(ItemStack itemStack) {
 		throw new UnsupportedOperationException();
 	}
 
 	/**
-	 * Get an enchantment name.
+	 * Get the translatable string of an item name. If you need a quicker way to get an item name in US English, you can
+	 * use {@link #getItemName(ItemStack)}.
+	 *
+	 * @param itemStack the item stack you want to get the translatable string of.
+	 * @return translatable string of the item stack
+	 * @see #getItemName(ItemStack) 
+	 */
+	public String getTranslatableItemName(ItemStack itemStack) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * Get an enchantment name in US English. If you need the name in another language, use
+	 * {@link #getTranslatableEnchantmentName(Enchantment)} to get a translatable string and pass that to an I18n
+	 * library.
 	 *
 	 * @param enchantment the enchantment you want the name of
 	 * @param level the level of the enchantment you want the name of
 	 * @return the name of the enchantment
+	 * @see #getTranslatableEnchantmentName(Enchantment)
 	 */
 	public String getEnchantmentName(Enchantment enchantment, int level) {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * Get the translatable string of an enchantment name. If you need a quicker way to get an enchantment name in US
+	 * English, you can use {@link #getEnchantmentName(Enchantment, int)}.
+	 *
+	 * @param enchantment the enchantment you want to get the translatable string of.
+	 * @return the translatable string of the enchantment
+	 * @see #getEnchantmentName(Enchantment, int)
+	 */
+	public String getTranslatableEnchantmentName(Enchantment enchantment) {
 		throw new UnsupportedOperationException();
 	}
 
