@@ -54,7 +54,7 @@ public class NBTTool {
 		serializer = s;
 	}
 
-	static NBTUtil getUtil() {
+	public static NBTUtil getUtil() {
 		if (nbtutil == null)
 			throw new UnsupportedOperationException();
 		return nbtutil;
