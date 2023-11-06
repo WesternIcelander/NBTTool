@@ -24,10 +24,12 @@
 package io.siggi.nbt.v1_19_R3;
 
 import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
 import io.siggi.nbt.NBTCompound;
 import io.siggi.nbt.NBTList;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.serialization.Dynamic;
+import io.siggi.nbt.util.AuthLibProperty;
 import io.siggi.nbt.util.NBTUtil;
 import java.util.Map;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -274,5 +276,10 @@ final class NBTUtilImpl extends NBTUtil {
 	public NBTCompound deserialize(InputStream in) throws IOException {
 		DataInputStream dataIn = in instanceof DataInputStream ? ((DataInputStream) in) : new DataInputStream(in);
 		return wrapCompound(NBTCompressedStreamTools.a((DataInput) dataIn));
+	}
+
+	@Override
+	public AuthLibProperty wrapProperty(Property property) {
+		return new AuthLibProperty(property.getName(), property.getValue(), property.getSignature());
 	}
 }

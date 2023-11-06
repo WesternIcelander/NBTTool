@@ -323,11 +323,11 @@ public abstract class NBTUtil {
 		NBTCompound properties = newCompound();
 		skullOwner.setCompound("Properties", properties);
 
-		Property textures = null;
+		AuthLibProperty textures = null;
 		PropertyMap props = profile.getProperties();
 		for (Map.Entry<String, Property> entry : props.entries()) {
 			if (entry.getKey().equals("textures")) {
-				textures = entry.getValue();
+				textures = wrapProperty(entry.getValue());
 				break;
 			}
 		}
@@ -339,12 +339,12 @@ public abstract class NBTUtil {
 			NBTCompound texturesCompound = newCompound();
 			texturesList.addCompound(texturesCompound);
 
-			String value = textures.getValue();
+			String value = textures.value();
 			if (value != null) {
 				texturesCompound.setString("Value", value);
 			}
 
-			String signature = textures.getSignature();
+			String signature = textures.signature();
 			if (signature != null) {
 				texturesCompound.setString("Signature", signature);
 			}
@@ -366,4 +366,8 @@ public abstract class NBTUtil {
 	public abstract void serialize(OutputStream out, NBTCompound compound) throws IOException;
 
 	public abstract NBTCompound deserialize(InputStream in) throws IOException;
+
+	public AuthLibProperty wrapProperty(Property property) {
+		return new AuthLibProperty(property.name(), property.value(), property.signature());
+	}
 }
