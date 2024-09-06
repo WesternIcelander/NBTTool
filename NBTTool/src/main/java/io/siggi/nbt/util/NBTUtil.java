@@ -121,6 +121,37 @@ public abstract class NBTUtil {
 	}
 
 	/**
+	 * Gets an NBT component of the specified {@link ItemStack}, which may be null.
+	 *
+	 * @param stack the item to get the NBT tag of, or null if the item doesn't
+	 * have one.
+	 * @param component the name of the component to get.
+	 * @return an {@link NBTCompound} containing the NBT tag of the item stack.
+	 */
+	public NBTCompound getComponent(ItemStack stack, String component) {
+		if (component.equals("minecraft:custom_data")) {
+			return getTag(stack);
+		}
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * Creates a copy of the specified {@link ItemStack} and sets the NBT component on
+	 * the copy to the specified tag and returns the copy.
+	 *
+	 * @param stack the item to set a new NBT tag on.
+	 * @param component the name of the component to set.
+	 * @param compound the NBT component to set on the item.
+	 * @return an {@link ItemStack} with the newly set NBT tag.
+	 */
+	public ItemStack setComponent(ItemStack stack, String component, NBTCompound compound) {
+		if (component.equals("minecraft:custom_data")) {
+			return setTag(stack, compound);
+		}
+		throw new UnsupportedOperationException();
+	}
+
+	/**
 	 * Serializes an {@link ItemStack} to an {@link NBTCompound}. NBTCompound
 	 * representations of ItemStacks are guaranteed to be compatible with
 	 * versions of Minecraft newer than ones they were serialized in, but not
