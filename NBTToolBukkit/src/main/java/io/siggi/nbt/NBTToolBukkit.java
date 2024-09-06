@@ -91,6 +91,16 @@ public class NBTToolBukkit {
 	}
 
 	/**
+	 * Create a player head with a texture URL.
+	 *
+	 * @param textureUrl the texture URL
+	 * @return
+	 */
+	public static ItemStack createPlayerHeadFromTexture(String textureUrl) {
+		return getUtil().createPlayerHeadFromTexture(textureUrl);
+	}
+
+	/**
 	 * Set the GameProfile for a player head.
 	 *
 	 * @param skull   the player head to set the GameProfile for.
