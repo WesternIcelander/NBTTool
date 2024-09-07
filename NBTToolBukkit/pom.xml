@@ -158,6 +158,11 @@
             <artifactId>NBTTool_v1_20_R4</artifactId>
             <version>1.10-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>io.siggi</groupId>
+            <artifactId>NBTTool_v1_21_R1</artifactId>
+            <version>1.10-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
