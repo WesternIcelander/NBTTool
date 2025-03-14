@@ -48,6 +48,7 @@ import net.minecraft.util.datafix.fixes.DataConverterTypes;
 import net.minecraft.world.entity.EntityInsentient;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.level.World;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -274,7 +275,7 @@ final class NBTUtilImpl extends NBTUtil {
 		try {
 			Field profileField = CraftSkull.class.getDeclaredField("profile");
 			profileField.setAccessible(true);
-			profileField.set(skull, profile);
+			profileField.set(skull, new ResolvableProfile(profile));
 		} catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException t) {
 			throw new RuntimeException(t);
 		}
