@@ -185,26 +185,6 @@ public abstract class NBTUtil {
 	}
 
 	/**
-	 * 1.10 or higher only: Summon an entity almost as if done by the
-	 * <code>/summon</code> command. You have a bit more control over the
-	 * location (You can specify the world, not just the coordinates relative to
-	 * a {@link CommandSender}) and can also provide a SpawnReason for Bukkit
-	 * events. The entity type has to be specified in a string tag
-	 * <code>id</code>.
-	 *
-	 * @param nbtTag NBT tag for the entity.
-	 * @param location the location to spawn this entity in.
-	 * @param reason the reason the entity was spawned.
-	 * @throws UnsupportedOperationException if this method is called on server
-	 * version lower than 1.10.
-	 * @return The entity if summoned successfully, or null if it could not be
-	 * @since v1_10_R1 summoned.
-	 */
-	public Entity summonEntity(NBTCompound nbtTag, Location location, CreatureSpawnEvent.SpawnReason reason) {
-		throw new UnsupportedOperationException("Not available on this version.");
-	}
-
-	/**
 	 * 1.8R2 or higher only: Enable or disable AI for an entity.
 	 *
 	 * @param entity the entity to change AI for

@@ -171,24 +171,6 @@ final class NBTUtilImpl extends NBTUtil {
 	}
 
 	@Override
-	public Entity summonEntity(NBTCompound nbtTag, Location location, CreatureSpawnEvent.SpawnReason reason) {
-		WorldServer worldserver = ((CraftWorld) location.getWorld()).getHandle();
-		World world = worldserver.getMinecraftWorld();
-		double x = location.getX();
-		double y = location.getY();
-		double z = location.getZ();
-		net.minecraft.world.entity.Entity nmsEntity = EntityTypes.a(nbtTag.getNMSCompound(), worldserver, (ent) -> {
-			ent.setPositionRotation(x, y, z, ent.x/*yaw*/, ent.y/*pitch*/);
-			return !worldserver.addEntitySerialized(ent, reason) ? null : ent;
-		});
-		if (nmsEntity == null) {
-			return null;
-		}
-		nmsEntity.setPositionRotation(x, y, z, nmsEntity.x/*yaw*/, nmsEntity.y/*pitch*/);
-		return nmsEntity.getBukkitEntity();
-	}
-
-	@Override
 	public void setAI(Entity entity, boolean ai) {
 		net.minecraft.world.entity.Entity nmsEntity = ((CraftEntity) entity).getHandle();
 		if (nmsEntity instanceof EntityInsentient) {
