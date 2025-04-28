@@ -34,7 +34,30 @@ import java.util.Map;
 public class NBTToolPlugin extends JavaPlugin {
 
 	private static boolean loadSuccessful = false;
+
+	private static String getVersion() {
+		String name = Bukkit.getServer().getClass().getName();
+		String version = name.substring(name.indexOf(".v") + 1);
+		version = version.substring(0, version.indexOf("."));
+		if (!version.startsWith("v")) {
+			return nmsVersions.getOrDefault(Bukkit.getMinecraftVersion(), latestNmsVersion);
+		}
+		return version;
+	}
+
+	private static final Map<String, String> nmsVersions = new HashMap<>();
+	private static final String latestNmsVersion;
 	static {
+		nmsVersions.put("1.20.5", "v1_20_R4");
+		nmsVersions.put("1.20.6", "v1_20_R4");
+		nmsVersions.put("1.21", "v1_21_R1");
+		nmsVersions.put("1.21.1", "v1_21_R1");
+		nmsVersions.put("1.21.2", "v1_21_R2");
+		nmsVersions.put("1.21.3", "v1_21_R2");
+		nmsVersions.put("1.21.4", "v1_21_R3");
+		nmsVersions.put("1.21.5", "v1_21_R4");
+		latestNmsVersion = "v1_21_R4";
+
 		tryBlock:
 		try {
 			NBTUtilFactory nbtUtilFactory = getNBTUtilFactory();
@@ -49,7 +72,6 @@ public class NBTToolPlugin extends JavaPlugin {
 			loadSuccessful = true;
 		} catch (Exception e) {
 			NBTTool.nbtutil = null;
-			e.printStackTrace();
 		}
 	}
 
@@ -83,31 +105,8 @@ public class NBTToolPlugin extends JavaPlugin {
 			Constructor<?> factoryConstructor = factoryClass.getDeclaredConstructor();
 			return (NBTUtilFactory) factoryConstructor.newInstance();
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
-	}
-
-	private static final Map<String, String> nmsVersions = new HashMap<>();
-	private static final String latestNmsVersion;
-	static {
-		nmsVersions.put("1.20.5", "v1_20_R4");
-		nmsVersions.put("1.20.6", "v1_20_R4");
-		nmsVersions.put("1.21", "v1_21_R1");
-		nmsVersions.put("1.21.1", "v1_21_R1");
-		nmsVersions.put("1.21.2", "v1_21_R2");
-		nmsVersions.put("1.21.3", "v1_21_R2");
-		nmsVersions.put("1.21.4", "v1_21_R3");
-		nmsVersions.put("1.21.5", "v1_21_R4");
-		latestNmsVersion = "v1_21_R4";
-	}
-
-	private static String getVersion() {
-		String name = Bukkit.getServer().getClass().getName();
-		String version = name.substring(name.indexOf(".v") + 1);
-		version = version.substring(0, version.indexOf("."));
-		if (!version.startsWith("v")) {
-			return nmsVersions.getOrDefault(Bukkit.getMinecraftVersion(), latestNmsVersion);
-		}
-		return version;
 	}
 }
