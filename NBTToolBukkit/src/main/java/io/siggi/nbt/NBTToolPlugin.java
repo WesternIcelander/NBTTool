@@ -28,6 +28,8 @@ import io.siggi.nbt.util.NBTUtilFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.lang.reflect.Constructor;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NBTToolPlugin extends JavaPlugin {
 
@@ -85,10 +87,27 @@ public class NBTToolPlugin extends JavaPlugin {
 		}
 	}
 
+	private static final Map<String, String> nmsVersions = new HashMap<>();
+	private static final String latestNmsVersion;
+	static {
+		nmsVersions.put("1.20.5", "v1_20_R4");
+		nmsVersions.put("1.20.6", "v1_20_R4");
+		nmsVersions.put("1.21", "v1_21_R1");
+		nmsVersions.put("1.21.1", "v1_21_R1");
+		nmsVersions.put("1.21.2", "v1_21_R2");
+		nmsVersions.put("1.21.3", "v1_21_R2");
+		nmsVersions.put("1.21.4", "v1_21_R3");
+		nmsVersions.put("1.21.5", "v1_21_R4");
+		latestNmsVersion = "v1_21_R4";
+	}
+
 	private static String getVersion() {
 		String name = Bukkit.getServer().getClass().getName();
 		String version = name.substring(name.indexOf(".v") + 1);
 		version = version.substring(0, version.indexOf("."));
+		if (!version.startsWith("v")) {
+			return nmsVersions.getOrDefault(Bukkit.getMinecraftVersion(), latestNmsVersion);
+		}
 		return version;
 	}
 }

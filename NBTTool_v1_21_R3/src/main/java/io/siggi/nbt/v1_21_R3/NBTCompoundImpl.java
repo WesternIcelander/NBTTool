@@ -25,34 +25,35 @@ package io.siggi.nbt.v1_21_R3;
 
 import io.siggi.nbt.NBTCompound;
 import io.siggi.nbt.NBTList;
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+
 import java.util.Set;
 
 final class NBTCompoundImpl extends NBTCompound {
 
-	public final NBTTagCompound compound;
+	public final CompoundTag compound;
 
 	public NBTCompoundImpl() {
 		super(true);
-		this.compound = new NBTTagCompound();
+		this.compound = new CompoundTag();
 	}
 
-	public NBTCompoundImpl(NBTTagCompound compound) {
+	public NBTCompoundImpl(CompoundTag compound) {
 		super(true);
 		this.compound = compound;
 	}
 
 	@Override
-	public NBTTagCompound getNMSCompound() {
+	public CompoundTag getNMSCompound() {
 		return compound;
 	}
 
 	@Override
 	public int getTypeId(String key) {
 		try {
-			return compound.c(key).b();
+			return compound.get(key).getId();
 		} catch (NullPointerException e) {
 			return 0;
 		}
@@ -60,141 +61,141 @@ final class NBTCompoundImpl extends NBTCompound {
 
 	@Override
 	public byte getByte(String key) {
-		return compound.f(key);
+		return compound.getByte(key);
 	}
 
 	@Override
 	public void setByte(String key, byte value) {
-		compound.a(key, value);
+		compound.putByte(key, value);
 	}
 
 	@Override
 	public short getShort(String key) {
-		return compound.g(key);
+		return compound.getShort(key);
 	}
 
 	@Override
 	public void setShort(String key, short value) {
-		compound.a(key, value);
+		compound.putShort(key, value);
 	}
 
 	@Override
 	public int getInt(String key) {
-		return compound.h(key);
+		return compound.getInt(key);
 	}
 
 	@Override
 	public void setInt(String key, int value) {
-		compound.a(key, value);
+		compound.putInt(key, value);
 	}
 
 	@Override
 	public long getLong(String key) {
-		return compound.i(key);
+		return compound.getLong(key);
 	}
 
 	@Override
 	public void setLong(String key, long value) {
-		compound.a(key, value);
+		compound.putLong(key, value);
 	}
 
 	@Override
 	public float getFloat(String key) {
-		return compound.j(key);
+		return compound.getFloat(key);
 	}
 
 	@Override
 	public void setFloat(String key, float value) {
-		compound.a(key, value);
+		compound.putFloat(key, value);
 	}
 
 	@Override
 	public double getDouble(String key) {
-		return compound.k(key);
+		return compound.getDouble(key);
 	}
 
 	@Override
 	public void setDouble(String key, double value) {
-		compound.a(key, value);
+		compound.putDouble(key, value);
 	}
 
 	@Override
 	public byte[] getByteArray(String key) {
-		return compound.m(key);
+		return compound.getByteArray(key);
 	}
 
 	@Override
 	public void setByteArray(String key, byte[] value) {
-		compound.a(key, value);
+		compound.putByteArray(key, value);
 	}
 
 	@Override
 	public String getString(String key) {
-		return compound.l(key);
+		return compound.getString(key);
 	}
 
 	@Override
 	public void setString(String key, String value) {
-		compound.a(key, value);
+		compound.putString(key, value);
 	}
 
 	@Override
 	public NBTListImpl getList(String key) {
-		NBTBase base = compound.c(key);
-		if (base instanceof NBTTagList) {
-			return new NBTListImpl((NBTTagList) base);
+		Tag base = compound.get(key);
+		if (base instanceof ListTag) {
+			return new NBTListImpl((ListTag) base);
 		}
 		return new NBTListImpl();
 	}
 
 	@Override
 	public void setList(String key, NBTList list) {
-		this.compound.a(key, (NBTTagList) list.getNMSList());
+		this.compound.put(key, (ListTag) list.getNMSList());
 	}
 
 	@Override
 	public NBTCompound getCompound(String key) {
-		return new NBTCompoundImpl(compound.p(key));
+		return new NBTCompoundImpl(compound.getCompound(key));
 	}
 
 	@Override
 	public void setCompound(String key, NBTCompound compound) {
-		this.compound.a(key, (NBTTagCompound) compound.getNMSCompound());
+		this.compound.put(key, (CompoundTag) compound.getNMSCompound());
 	}
 
 	@Override
 	public int[] getIntArray(String key) {
-		return this.compound.n(key);
+		return this.compound.getIntArray(key);
 	}
 
 	@Override
 	public void setIntArray(String key, int[] value) {
-		this.compound.a(key, value);
+		this.compound.putIntArray(key, value);
 	}
 
 	@Override
 	public long[] getLongArray(String key) {
-		return this.compound.o(key);
+		return this.compound.getLongArray(key);
 	}
 
 	@Override
 	public void setLongArray(String key, long[] value) {
-		this.compound.a(key, value);
+		this.compound.putLongArray(key, value);
 	}
 
 	@Override
 	public Set<String> keySet() {
-		return this.compound.e();
+		return this.compound.getAllKeys();
 	}
 
 	@Override
 	public int size() {
-		return this.compound.f();
+		return this.compound.size();
 	}
 
 	@Override
 	public void remove(String key) {
-		this.compound.r(key);
+		this.compound.remove(key);
 	}
 
 	@Override
@@ -215,6 +216,6 @@ final class NBTCompoundImpl extends NBTCompound {
 
 	@Override
 	public NBTCompound copy() {
-		return new NBTCompoundImpl((NBTTagCompound) compound.d());
+		return new NBTCompoundImpl((CompoundTag) compound.copy());
 	}
 }

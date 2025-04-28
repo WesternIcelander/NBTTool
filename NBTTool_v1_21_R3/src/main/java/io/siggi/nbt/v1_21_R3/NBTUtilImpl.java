@@ -31,41 +31,30 @@ import com.mojang.serialization.Dynamic;
 import io.siggi.nbt.util.NBTUtil;
 import java.util.Map;
 
-import net.minecraft.core.Holder;
-import net.minecraft.core.IRegistryCustom;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.DynamicOpsNBT;
-import net.minecraft.nbt.NBTCompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.NbtIo;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.CommonComponents;
-import net.minecraft.network.chat.IChatBaseComponent;
-import net.minecraft.network.chat.IChatMutableComponent;
-import net.minecraft.resources.MinecraftKey;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.WorldServer;
-import net.minecraft.util.datafix.fixes.DataConverterTypes;
-import net.minecraft.world.entity.EntityInsentient;
-import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.util.datafix.fixes.References;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.ResolvableProfile;
-import net.minecraft.world.level.World;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Skull;
-import org.bukkit.craftbukkit.v1_21_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_21_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_21_R3.block.CraftSkull;
-import org.bukkit.craftbukkit.v1_21_R3.enchantments.CraftEnchantment;
-import org.bukkit.craftbukkit.v1_21_R3.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_21_R3.inventory.CraftItemStack;
-import org.bukkit.craftbukkit.v1_21_R3.util.CraftMagicNumbers;
+import org.bukkit.craftbukkit.CraftServer;
+import org.bukkit.craftbukkit.block.CraftSkull;
+import org.bukkit.craftbukkit.enchantments.CraftEnchantment;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.util.CraftMagicNumbers;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentWrapper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import java.io.DataInput;
 import java.io.DataInputStream;
@@ -90,12 +79,12 @@ final class NBTUtilImpl extends NBTUtil {
 
 	@Override
 	public <T> NBTCompound wrapCompound(T compound) {
-		return new NBTCompoundImpl((NBTTagCompound) compound);
+		return new NBTCompoundImpl((CompoundTag) compound);
 	}
 
 	@Override
 	public <T> NBTList wrapList(T list) {
-		return new NBTListImpl((NBTTagList) list);
+		return new NBTListImpl((ListTag) list);
 	}
 
 	@Override
@@ -129,7 +118,7 @@ final class NBTUtilImpl extends NBTUtil {
 	public NBTCompound itemToNBT(ItemStack stack) {
 		try {
 			net.minecraft.world.item.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
-			NBTTagCompound nmsCompound = (NBTTagCompound) nmsStack.b(registryAccess());
+			CompoundTag nmsCompound = (CompoundTag) nmsStack.save(registryAccess());
 			NBTCompound compound = new NBTCompoundImpl(nmsCompound);
 			compound.setInt("DataVersion", getDataVersion());
 			return compound;
@@ -144,15 +133,15 @@ final class NBTUtilImpl extends NBTUtil {
 			return null;
 		}
 		try {
-			DataFixer dataConverterManager = getMinecraftServer().L;
+			DataFixer dataConverterManager = getMinecraftServer().fixerUpper;
 			NBTCompound tempItem = compound.copy();
-			NBTTagCompound nmsCompound = (NBTTagCompound) dataConverterManager.update(
-					DataConverterTypes.t,
-					new Dynamic(DynamicOpsNBT.a, tempItem.getNMSCompound()),
+			CompoundTag nmsCompound = (CompoundTag) dataConverterManager.update(
+					References.ITEM_STACK,
+					new Dynamic(NbtOps.INSTANCE, tempItem.getNMSCompound()),
 					tempItem.getInt("DataVersion"),
 					getDataVersion()
 			).getValue();
-			net.minecraft.world.item.ItemStack nmsStack = net.minecraft.world.item.ItemStack.a(registryAccess(), nmsCompound);
+			net.minecraft.world.item.ItemStack nmsStack = net.minecraft.world.item.ItemStack.parseOptional(registryAccess(), nmsCompound);
 			return CraftItemStack.asCraftMirror(nmsStack);
 		} catch (Exception e) {
 			return null;
@@ -199,7 +188,7 @@ final class NBTUtilImpl extends NBTUtil {
 	}
 
 	private Item getItem(net.minecraft.world.item.ItemStack nmsStack) {
-		return nmsStack.h();
+		return nmsStack.getItem();
 	}
 
 	@Override
@@ -209,7 +198,7 @@ final class NBTUtilImpl extends NBTUtil {
 		if (item == null) {
 			return "null";
 		} else {
-			return item.a(nmsStack).getString();
+			return item.getName(nmsStack).getString();
 		}
 	}
 
@@ -220,7 +209,7 @@ final class NBTUtilImpl extends NBTUtil {
 		if (item == null) {
 			return "null";
 		} else {
-			return item.l();
+			return item.getDescriptionId();
 		}
 	}
 
@@ -234,9 +223,9 @@ final class NBTUtilImpl extends NBTUtil {
 
 	@Override
 	public String getEnchantmentName(Enchantment enchantment, int level) {
-		IChatMutableComponent base = IChatBaseComponent.c(getTranslatableEnchantmentName(enchantment));
-		if (level != 1 || getRaw(enchantment).e() != 1) {
-			base.b(CommonComponents.v).b(IChatBaseComponent.c("enchantment.level." + level));
+		MutableComponent base = Component.translatable(getTranslatableEnchantmentName(enchantment));
+		if (level != 1 || getRaw(enchantment).getMaxLevel() != 1) {
+			base.append(CommonComponents.SPACE).append(Component.translatable("enchantment.level." + level));
 		}
 		return base.getString();
 	}
@@ -266,25 +255,25 @@ final class NBTUtilImpl extends NBTUtil {
 	@Override
 	public void serialize(OutputStream out, NBTCompound compound) throws IOException {
 		DataOutputStream dataOut = out instanceof DataOutputStream ? ((DataOutputStream) out) : new DataOutputStream(out);
-		NBTCompressedStreamTools.a(compound.getNMSCompound(), (DataOutput) dataOut);
+		NbtIo.write(compound.getNMSCompound(), (DataOutput) dataOut);
 	}
 
 	@Override
 	public NBTCompound deserialize(InputStream in) throws IOException {
 		DataInputStream dataIn = in instanceof DataInputStream ? ((DataInputStream) in) : new DataInputStream(in);
-		return wrapCompound(NBTCompressedStreamTools.a((DataInput) dataIn));
+		return wrapCompound(NbtIo.read((DataInput) dataIn));
 	}
 
 	private MinecraftServer minecraftServer;
 
 	private MinecraftServer getMinecraftServer() {
 		if (minecraftServer == null) {
-			minecraftServer = ((CraftServer) Bukkit.getServer()).getHandle().b();
+			minecraftServer = ((CraftServer) Bukkit.getServer()).getHandle().getServer();
         }
 		return minecraftServer;
 	}
 
-	private IRegistryCustom.Dimension registryAccess() {
-		return getMinecraftServer().ba();
+	private RegistryAccess.Frozen registryAccess() {
+		return getMinecraftServer().registryAccess();
 	}
 }

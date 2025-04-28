@@ -26,186 +26,186 @@ package io.siggi.nbt.v1_21_R1;
 import io.siggi.nbt.NBTCompound;
 import io.siggi.nbt.NBTList;
 import io.siggi.nbt.NBTType;
-import net.minecraft.nbt.NBTTagByte;
-import net.minecraft.nbt.NBTTagByteArray;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagDouble;
-import net.minecraft.nbt.NBTTagFloat;
-import net.minecraft.nbt.NBTTagInt;
-import net.minecraft.nbt.NBTTagIntArray;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagLong;
-import net.minecraft.nbt.NBTTagLongArray;
-import net.minecraft.nbt.NBTTagShort;
-import net.minecraft.nbt.NBTTagString;
+import net.minecraft.nbt.ByteArrayTag;
+import net.minecraft.nbt.ByteTag;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.DoubleTag;
+import net.minecraft.nbt.FloatTag;
+import net.minecraft.nbt.IntArrayTag;
+import net.minecraft.nbt.IntTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.LongArrayTag;
+import net.minecraft.nbt.LongTag;
+import net.minecraft.nbt.ShortTag;
+import net.minecraft.nbt.StringTag;
 
 final class NBTListImpl extends NBTList {
 
-	public final NBTTagList list;
+	public final ListTag list;
 
 	public NBTListImpl() {
 		super(true);
-		this.list = new NBTTagList();
+		this.list = new ListTag();
 	}
 
-	public NBTListImpl(NBTTagList list) {
+	public NBTListImpl(ListTag list) {
 		super(true);
 		this.list = list;
 	}
 
 	@Override
-	public NBTTagList getNMSList() {
+	public ListTag getNMSList() {
 		return list;
 	}
 
 	@Override
 	public int getTypeId() {
-		return ((int) list.f()) & 0xff;
+		return ((int) list.getId()) & 0xff;
 	}
 
 	@Override
 	public void addByte(byte value) {
-		list.add(NBTTagByte.a(value));
+		list.add(ByteTag.valueOf(value));
 	}
 
 	@Override
 	public byte getByte(int key) {
-		if (list.get(key).b() != NBTType.Byte.id) {
+		if (list.get(key).getId() != NBTType.Byte.id) {
 			return (byte) 0;
 		}
-		return ((NBTTagByte) list.get(key)).i();
+		return ((ByteTag) list.get(key)).getAsByte();
 	}
 
 	@Override
 	public void setByte(int key, byte value) {
-		list.set(key, NBTTagByte.a(value));
+		list.set(key, ByteTag.valueOf(value));
 	}
 
 	@Override
 	public void addShort(short value) {
-		list.add(NBTTagShort.a(value));
+		list.add(ShortTag.valueOf(value));
 	}
 
 	@Override
 	public short getShort(int key) {
-		if (list.get(key).b() != NBTType.Short.id) {
+		if (list.get(key).getId() != NBTType.Short.id) {
 			return (short) 0;
 		}
-		return ((NBTTagShort) list.get(key)).h();
+		return ((ShortTag) list.get(key)).getAsShort();
 	}
 
 	@Override
 	public void setShort(int key, short value) {
-		list.set(key, NBTTagShort.a(value));
+		list.set(key, ShortTag.valueOf(value));
 	}
 
 	@Override
 	public void addInt(int value) {
-		list.add(NBTTagInt.a(value));
+		list.add(IntTag.valueOf(value));
 	}
 
 	@Override
 	public int getInt(int key) {
-		if (list.get(key).b() != NBTType.Int.id) {
+		if (list.get(key).getId() != NBTType.Int.id) {
 			return 0;
 		}
-		return ((NBTTagInt) list.get(key)).g();
+		return ((IntTag) list.get(key)).getAsInt();
 	}
 
 	@Override
 	public void setInt(int key, int value) {
-		list.set(key, NBTTagInt.a(value));
+		list.set(key, IntTag.valueOf(value));
 	}
 
 	@Override
 	public void addLong(long value) {
-		list.add(NBTTagLong.a(value));
+		list.add(LongTag.valueOf(value));
 	}
 
 	@Override
 	public long getLong(int key) {
-		if (list.get(key).b() != NBTType.Long.id) {
+		if (list.get(key).getId() != NBTType.Long.id) {
 			return 0L;
 		}
-		return ((NBTTagLong) list.get(key)).f();
+		return ((LongTag) list.get(key)).getAsLong();
 
 	}
 
 	@Override
 	public void setLong(int key, long value) {
-		list.set(key, NBTTagLong.a(value));
+		list.set(key, LongTag.valueOf(value));
 	}
 
 	@Override
 	public void addFloat(float value) {
-		list.add(NBTTagFloat.a(value));
+		list.add(FloatTag.valueOf(value));
 	}
 
 	@Override
 	public float getFloat(int key) {
-		if (list.get(key).b() != NBTType.Float.id) {
+		if (list.get(key).getId() != NBTType.Float.id) {
 			return 0.0F;
 		}
-		return ((NBTTagFloat) list.get(key)).k();
+		return ((FloatTag) list.get(key)).getAsFloat();
 	}
 
 	@Override
 	public void setFloat(int key, float value) {
-		list.set(key, NBTTagFloat.a(value));
+		list.set(key, FloatTag.valueOf(value));
 	}
 
 	@Override
 	public void addDouble(double value) {
-		list.add(NBTTagDouble.a(value));
+		list.add(DoubleTag.valueOf(value));
 	}
 
 	@Override
 	public double getDouble(int key) {
-		if (list.get(key).b() != NBTType.Double.id) {
+		if (list.get(key).getId() != NBTType.Double.id) {
 			return 0.0D;
 		}
-		return ((NBTTagDouble) list.get(key)).j();
+		return ((DoubleTag) list.get(key)).getAsDouble();
 	}
 
 	@Override
 	public void setDouble(int key, double value) {
-		list.set(key, NBTTagDouble.a(value));
+		list.set(key, DoubleTag.valueOf(value));
 	}
 
 	@Override
 	public void addByteArray(byte[] value) {
-		list.add(new NBTTagByteArray(value));
+		list.add(new ByteArrayTag(value));
 	}
 
 	@Override
 	public byte[] getByteArray(int key) {
-		if (list.get(key).b() != NBTType.ByteArray.id) {
+		if (list.get(key).getId() != NBTType.ByteArray.id) {
 			return new byte[0];
 		}
-		return ((NBTTagByteArray) list.get(key)).e();
+		return ((ByteArrayTag) list.get(key)).getAsByteArray();
 	}
 
 	@Override
 	public void setByteArray(int key, byte[] value) {
-		list.set(key, new NBTTagByteArray(value));
+		list.set(key, new ByteArrayTag(value));
 	}
 
 	@Override
 	public void addString(String value) {
-		list.add(NBTTagString.a(value));
+		list.add(StringTag.valueOf(value));
 	}
 
 	@Override
 	public String getString(int key) {
-		if (list.get(key).b() != NBTType.String.id) {
+		if (list.get(key).getId() != NBTType.String.id) {
 			return "";
 		}
-		return ((NBTTagString) list.get(key)).s_();
+		return ((StringTag) list.get(key)).getAsString();
 	}
 
 	@Override
 	public void setString(int key, String value) {
-		list.set(key, NBTTagString.a(value));
+		list.set(key, StringTag.valueOf(value));
 	}
 
 	@Override
@@ -215,10 +215,10 @@ final class NBTListImpl extends NBTList {
 
 	@Override
 	public NBTListImpl getList(int key) {
-		if (list.get(key).b() != NBTType.List.id) {
+		if (list.get(key).getId() != NBTType.List.id) {
 			return new NBTListImpl();
 		}
-		return new NBTListImpl((NBTTagList) list.get(key));
+		return new NBTListImpl((ListTag) list.get(key));
 	}
 
 	@Override
@@ -233,10 +233,10 @@ final class NBTListImpl extends NBTList {
 
 	@Override
 	public NBTCompound getCompound(int key) {
-		if (list.get(key).b() != NBTType.Compound.id) {
+		if (list.get(key).getId() != NBTType.Compound.id) {
 			return new NBTCompoundImpl();
 		}
-		return new NBTCompoundImpl((NBTTagCompound) list.get(key));
+		return new NBTCompoundImpl((CompoundTag) list.get(key));
 	}
 
 	@Override
@@ -246,38 +246,38 @@ final class NBTListImpl extends NBTList {
 
 	@Override
 	public void addIntArray(int[] value) {
-		list.add(new NBTTagIntArray(value));
+		list.add(new IntArrayTag(value));
 	}
 
 	@Override
 	public int[] getIntArray(int key) {
-		if (list.get(key).b() != NBTType.IntArray.id) {
+		if (list.get(key).getId() != NBTType.IntArray.id) {
 			return new int[0];
 		}
-		return ((NBTTagIntArray) list.get(key)).g();
+		return ((IntArrayTag) list.get(key)).getAsIntArray();
 	}
 
 	@Override
 	public void setIntArray(int key, int[] value) {
-		list.set(key, new NBTTagIntArray(value));
+		list.set(key, new IntArrayTag(value));
 	}
 
 	@Override
 	public void addLongArray(long[] value) {
-		list.add(new NBTTagLongArray(value));
+		list.add(new LongArrayTag(value));
 	}
 
 	@Override
 	public long[] getLongArray(int key) {
-		if (list.get(key).b() != NBTType.LongArray.id) {
+		if (list.get(key).getId() != NBTType.LongArray.id) {
 			return new long[0];
 		}
-		return ((NBTTagLongArray) list.get(key)).g();
+		return ((LongArrayTag) list.get(key)).getAsLongArray();
 	}
 
 	@Override
 	public void setLongArray(int key, long[] value) {
-		list.set(key, new NBTTagLongArray(value));
+		list.set(key, new LongArrayTag(value));
 	}
 
 	@Override
@@ -308,6 +308,6 @@ final class NBTListImpl extends NBTList {
 
 	@Override
 	public NBTList copy() {
-		return new NBTListImpl((NBTTagList) list.d());
+		return new NBTListImpl((ListTag) list.copy());
 	}
 }
