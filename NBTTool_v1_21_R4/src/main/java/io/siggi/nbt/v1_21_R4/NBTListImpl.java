@@ -60,7 +60,7 @@ final class NBTListImpl extends NBTList {
 
 	@Override
 	public int getTypeId() {
-		return ((int) list.getId()) & 0xff;
+		return ((int) list.identifyRawElementType()) & 0xff;
 	}
 
 	@Override
