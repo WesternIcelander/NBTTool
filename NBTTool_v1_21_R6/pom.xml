@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>io.siggi</groupId>
-    <artifactId>NBTTool</artifactId>
+    <artifactId>NBTTool_v1_21_R6</artifactId>
     <version>1.10-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -20,6 +20,17 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>io.siggi</groupId>
+            <artifactId>NBTTool</artifactId>
+            <version>1.10-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper</artifactId>
@@ -34,9 +45,5 @@
             </exclusions>
         </dependency>
     </dependencies>
-
-    <build>
-        <finalName>NBTTool</finalName>
-    </build>
 
 </project>

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Siggi.
+ * Copyright 2018 Siggi.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,13 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.siggi.nbt.v1_12_R1;
+package io.siggi.nbt.v1_21_R5;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 import com.mojang.authlib.properties.PropertyMap;
 import io.siggi.nbt.NBTCompound;
 import io.siggi.nbt.NBTList;
+import com.mojang.datafixers.DataFixer;
+import com.mojang.serialization.Dynamic;
 import io.siggi.nbt.util.AuthLibProperty;
 import io.siggi.nbt.util.NBTUtil;
 
@@ -35,30 +39,32 @@ import java.util.List;
 import java.util.Map;
 
 import io.siggi.nbt.util.UserProfile;
-import net.minecraft.server.v1_12_R1.ChunkRegionLoader;
-import net.minecraft.server.v1_12_R1.DataConverterManager;
-import net.minecraft.server.v1_12_R1.DataConverterType;
-import net.minecraft.server.v1_12_R1.DataConverterTypes;
-import net.minecraft.server.v1_12_R1.EntityInsentient;
-import net.minecraft.server.v1_12_R1.Item;
-import net.minecraft.server.v1_12_R1.MinecraftServer;
-import net.minecraft.server.v1_12_R1.NBTCompressedStreamTools;
-import net.minecraft.server.v1_12_R1.NBTTagCompound;
-import net.minecraft.server.v1_12_R1.NBTTagList;
-import net.minecraft.server.v1_12_R1.World;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.NbtIo;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.datafix.fixes.References;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.component.ResolvableProfile;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Skull;
-import org.bukkit.craftbukkit.v1_12_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_12_R1.block.CraftSkull;
-import org.bukkit.craftbukkit.v1_12_R1.enchantments.CraftEnchantment;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_12_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.CraftServer;
+import org.bukkit.craftbukkit.block.CraftSkull;
+import org.bukkit.craftbukkit.enchantments.CraftEnchantment;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.util.CraftMagicNumbers;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.enchantments.EnchantmentWrapper;
 import org.bukkit.entity.Entity;
-import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
+import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.DataOutputStream;
@@ -81,41 +87,49 @@ final class NBTUtilImpl extends NBTUtil {
 
 	@Override
 	public <T> NBTCompound wrapCompound(T compound) {
-		return new NBTCompoundImpl((NBTTagCompound) compound);
+		return new NBTCompoundImpl((CompoundTag) compound);
 	}
 
 	@Override
 	public <T> NBTList wrapList(T list) {
-		return new NBTListImpl((NBTTagList) list);
+		return new NBTListImpl((ListTag) list);
 	}
 
 	@Override
 	public NBTCompound getTag(ItemStack stack) {
-		net.minecraft.server.v1_12_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
-		if (nmsStack.hasTag()) {
-			return wrapCompound(nmsStack.getTag());
-		} else {
-			return null;
-		}
+		return getComponent(stack, "minecraft:custom_data");
 	}
 
 	@Override
 	public ItemStack setTag(ItemStack stack, NBTCompound compound) {
-		net.minecraft.server.v1_12_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
-		if (compound == null) {
-			nmsStack.setTag(null);
-		} else {
-			nmsStack.setTag(compound.getNMSCompound());
-		}
-		return CraftItemStack.asCraftMirror(nmsStack);
+		return setComponent(stack, "minecraft:custom_data", compound);
+	}
+
+	@Override
+	public NBTCompound getComponent(ItemStack stack, String component) {
+		NBTCompound itemCompound = itemToNBT(stack);
+		NBTCompound components = itemCompound.getCompound("components");
+		if (!components.keySet().contains(component)) return null;
+		return components.getCompound(component);
+	}
+
+	@Override
+	public ItemStack setComponent(ItemStack stack, String component, NBTCompound compound) {
+		NBTCompound itemCompound = itemToNBT(stack);
+		if (!itemCompound.keySet().contains("components")) itemCompound.setCompound("components", new NBTCompound());
+		NBTCompound components = itemCompound.getCompound("components");
+		components.setCompound(component, compound);
+		return itemFromNBT(itemCompound);
 	}
 
 	@Override
 	public NBTCompound itemToNBT(ItemStack stack) {
 		try {
-			net.minecraft.server.v1_12_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
-			NBTTagCompound nmsCompound = new NBTTagCompound();
-			nmsStack.save(nmsCompound);
+			net.minecraft.world.item.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
+			CompoundTag nmsCompound =
+					nmsStack.isEmpty()
+							? new CompoundTag()
+							: (CompoundTag) net.minecraft.world.item.ItemStack.CODEC.encode(nmsStack, registryAccess().createSerializationContext(NbtOps.INSTANCE), new CompoundTag()).getOrThrow();
 			NBTCompound compound = new NBTCompoundImpl(nmsCompound);
 			compound.setInt("DataVersion", getDataVersion());
 			return compound;
@@ -130,12 +144,20 @@ final class NBTUtilImpl extends NBTUtil {
 			return null;
 		}
 		try {
-			int ver = compound.getInt("DataVersion");
-			DataConverterManager dataConverterManager = ((CraftServer) Bukkit.getServer()).getHandle().getServer().dataConverterManager;
+			DataFixer dataConverterManager = getMinecraftServer().fixerUpper;
 			NBTCompound tempItem = compound.copy();
-			tempItem.remove("DataVersion");
-			NBTTagCompound nmsCompound = dataConverterManager.a((DataConverterType) DataConverterTypes.ITEM_INSTANCE, tempItem.getNMSCompound(), ver);
-			net.minecraft.server.v1_12_R1.ItemStack nmsStack = new net.minecraft.server.v1_12_R1.ItemStack(nmsCompound);
+			CompoundTag nmsCompound = (CompoundTag) dataConverterManager.update(
+					References.ITEM_STACK,
+					new Dynamic(NbtOps.INSTANCE, tempItem.getNMSCompound()),
+					tempItem.getInt("DataVersion"),
+					getDataVersion()
+			).getValue();
+			net.minecraft.world.item.ItemStack nmsStack =
+					nmsCompound.isEmpty()
+							? net.minecraft.world.item.ItemStack.EMPTY
+							: net.minecraft.world.item.ItemStack.CODEC.parse(registryAccess().createSerializationContext(NbtOps.INSTANCE), nmsCompound).resultOrPartial((itemId) -> {
+						throw new RuntimeException("Tried to load invalid item");
+					}).orElse(net.minecraft.world.item.ItemStack.EMPTY);
 			return CraftItemStack.asCraftMirror(nmsStack);
 		} catch (Exception e) {
 			return null;
@@ -146,14 +168,7 @@ final class NBTUtilImpl extends NBTUtil {
 
 	private int getDataVersion() {
 		if (dataVersion == -1) {
-			try {
-				DataConverterManager dataConverterManager = ((CraftServer) Bukkit.getServer()).getHandle().getServer().dataConverterManager;
-				Field f = DataConverterManager.class.getDeclaredField("d");
-				f.setAccessible(true);
-				dataVersion = f.getInt(dataConverterManager);
-			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
-				ex.printStackTrace();
-			}
+			dataVersion = CraftMagicNumbers.INSTANCE.getDataVersion();
 		}
 		return dataVersion;
 	}
@@ -175,69 +190,71 @@ final class NBTUtilImpl extends NBTUtil {
 
 	@Override
 	public void setAI(Entity entity, boolean ai) {
-		net.minecraft.server.v1_12_R1.Entity nmsEntity = ((CraftEntity) entity).getHandle();
-		if (nmsEntity instanceof EntityInsentient) {
-			EntityInsentient entityInsentient = (EntityInsentient) nmsEntity;
-			entityInsentient.setNoAI(!ai);
+		if (entity instanceof LivingEntity) {
+			((LivingEntity) entity).setAI(ai);
 		}
 	}
 
 	@Override
 	public boolean hasAI(Entity entity) {
-		net.minecraft.server.v1_12_R1.Entity nmsEntity = ((CraftEntity) entity).getHandle();
-		if (nmsEntity instanceof EntityInsentient) {
-			EntityInsentient entityInsentient = (EntityInsentient) nmsEntity;
-			return !entityInsentient.isNoAI();
-		} else {
-			return false;
+		if (entity instanceof LivingEntity) {
+			return ((LivingEntity) entity).hasAI();
 		}
+		return false;
 	}
 
-	private Item getItem(net.minecraft.server.v1_12_R1.ItemStack nmsStack) {
-		NBTTagCompound nbttc = new NBTTagCompound();
-		nmsStack.save(nbttc);
-		NBTCompound compound = wrapCompound(nbttc);
-		String id = compound.getString("id");
-		return Item.b(id);
+	private Item getItem(net.minecraft.world.item.ItemStack nmsStack) {
+		return nmsStack.getItem();
 	}
 
 	@Override
 	public String getItemName(ItemStack stack) {
-		net.minecraft.server.v1_12_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
+		net.minecraft.world.item.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
 		Item item = getItem(nmsStack);
 		if (item == null) {
 			return "null";
 		} else {
-			return item.b(nmsStack);
+			return item.getName(nmsStack).getString();
 		}
 	}
 
 	@Override
 	public String getTranslatableItemName(ItemStack stack) {
-		net.minecraft.server.v1_12_R1.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
+		net.minecraft.world.item.ItemStack nmsStack = CraftItemStack.asNMSCopy(stack);
 		Item item = getItem(nmsStack);
 		if (item == null) {
 			return "null";
 		} else {
-			return item.a(nmsStack) + ".name";
+			return item.getDescriptionId();
 		}
+	}
+
+	private net.minecraft.world.item.enchantment.Enchantment getRaw(Enchantment enchantment) {
+		if (enchantment instanceof EnchantmentWrapper) {
+			enchantment = ((EnchantmentWrapper) enchantment).getEnchantment();
+		}
+
+		return enchantment instanceof CraftEnchantment ? ((CraftEnchantment)enchantment).getHandle() : null;
 	}
 
 	@Override
 	public String getEnchantmentName(Enchantment enchantment, int level) {
-		net.minecraft.server.v1_12_R1.Enchantment raw = CraftEnchantment.getRaw(enchantment);
-		return raw.d(level);
+		MutableComponent base = Component.translatable(getTranslatableEnchantmentName(enchantment));
+		if (level != 1 || getRaw(enchantment).getMaxLevel() != 1) {
+			base.append(CommonComponents.SPACE).append(Component.translatable("enchantment.level." + level));
+		}
+		return base.getString();
 	}
 
 	@Override
 	public String getTranslatableEnchantmentName(Enchantment enchantment) {
-		net.minecraft.server.v1_12_R1.Enchantment raw = CraftEnchantment.getRaw(enchantment);
-		return raw.a();
+		NamespacedKey key = enchantment.getKey();
+		return "enchantment." + key.getNamespace() + "." + (key.getKey().replace("/", "."));
 	}
 
 	@Override
 	protected Map<String,String> doGetMojangUSEnglishTranslations() {
-		return readPropertiesLanguage(MinecraftServer.class.getResourceAsStream("/assets/minecraft/lang/en_us.lang"));
+		return readJsonLanguage(MinecraftServer.class.getResourceAsStream("/assets/minecraft/lang/en_us.json"));
 	}
 
 	@Override
@@ -245,7 +262,7 @@ final class NBTUtilImpl extends NBTUtil {
 		try {
 			Field profileField = CraftSkull.class.getDeclaredField("profile");
 			profileField.setAccessible(true);
-			profileField.set(skull, profile);
+			profileField.set(skull, new ResolvableProfile(profile));
 		} catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException t) {
 			throw new RuntimeException(t);
 		}
@@ -254,18 +271,26 @@ final class NBTUtilImpl extends NBTUtil {
 	@Override
 	public void serialize(OutputStream out, NBTCompound compound) throws IOException {
 		DataOutputStream dataOut = out instanceof DataOutputStream ? ((DataOutputStream) out) : new DataOutputStream(out);
-		NBTCompressedStreamTools.a(compound.getNMSCompound(), (DataOutput) dataOut);
+		NbtIo.write(compound.getNMSCompound(), (DataOutput) dataOut);
 	}
 
 	@Override
 	public NBTCompound deserialize(InputStream in) throws IOException {
 		DataInputStream dataIn = in instanceof DataInputStream ? ((DataInputStream) in) : new DataInputStream(in);
-		return wrapCompound(NBTCompressedStreamTools.a(dataIn));
+		return wrapCompound(NbtIo.read((DataInput) dataIn));
 	}
 
-	@Override
-	public AuthLibProperty wrapProperty(Property property) {
-		return new AuthLibProperty(property.getName(), property.getValue(), property.getSignature());
+	private MinecraftServer minecraftServer;
+
+	private MinecraftServer getMinecraftServer() {
+		if (minecraftServer == null) {
+			minecraftServer = ((CraftServer) Bukkit.getServer()).getHandle().getServer();
+        }
+		return minecraftServer;
+	}
+
+	private RegistryAccess.Frozen registryAccess() {
+		return getMinecraftServer().registryAccess();
 	}
 
 	@Override

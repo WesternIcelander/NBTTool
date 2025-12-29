@@ -56,7 +56,13 @@ public class NBTToolPlugin extends JavaPlugin {
 		nmsVersions.put("1.21.3", "v1_21_R2");
 		nmsVersions.put("1.21.4", "v1_21_R3");
 		nmsVersions.put("1.21.5", "v1_21_R4");
-		latestNmsVersion = "v1_21_R4";
+		nmsVersions.put("1.21.6", "v1_21_R5");
+		nmsVersions.put("1.21.7", "v1_21_R5");
+		nmsVersions.put("1.21.8", "v1_21_R5");
+		nmsVersions.put("1.21.9", "v1_21_R6");
+		nmsVersions.put("1.21.10", "v1_21_R6");
+		nmsVersions.put("1.21.11", "v1_21_R6");
+		latestNmsVersion = "v1_21_R6";
 
 		tryBlock:
 		try {

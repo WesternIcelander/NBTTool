@@ -23,6 +23,8 @@
  */
 package io.siggi.nbt.util;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -48,6 +50,7 @@ import org.bukkit.inventory.ItemStack;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -306,12 +309,22 @@ public abstract class NBTUtil {
 	}
 
 	/**
-	 * Create a player head with a GameProfile.
+	 * Create a player head with a UserProfile.
 	 *
 	 * @param profile the profile to use on the player head
 	 * @return
 	 */
 	public ItemStack createPlayerHead(GameProfile profile) {
+		return createPlayerHead(toUserProfile(profile));
+	}
+
+	/**
+	 * Create a player head with a UserProfile.
+	 *
+	 * @param profile the profile to use on the player head
+	 * @return
+	 */
+	public ItemStack createPlayerHead(UserProfile profile) {
 		NBTCompound item = newCompound();
 		item.setByte("Count", (byte) 1);
 		item.setShort("Damage", (short) 3);
@@ -336,14 +349,7 @@ public abstract class NBTUtil {
 		NBTCompound properties = newCompound();
 		skullOwner.setCompound("Properties", properties);
 
-		AuthLibProperty textures = null;
-		PropertyMap props = profile.getProperties();
-		for (Map.Entry<String, Property> entry : props.entries()) {
-			if (entry.getKey().equals("textures")) {
-				textures = wrapProperty(entry.getValue());
-				break;
-			}
-		}
+		AuthLibProperty textures = profile.getProperty("textures");
 
 		if (textures != null) {
 			NBTList texturesList = newList();
@@ -373,9 +379,9 @@ public abstract class NBTUtil {
 	 * @return
 	 */
 	public ItemStack createPlayerHeadFromTexture(String textureUrl) {
-		GameProfile profile = new GameProfile(new UUID(0L, 0L), "Textured Head");
+		UserProfile profile = new UserProfile(new UUID(0L, 0L), "Textured Head");
 		String texturePayload = Base64.getEncoder().encodeToString(("{\"textures\":{\"SKIN\":{\"url\":\"" + textureUrl + "\"}}}").getBytes(StandardCharsets.UTF_8));
-		profile.getProperties().put("textures", new Property("textures", texturePayload));
+		profile.addProperty(new AuthLibProperty("textures", texturePayload, null));
 		return createPlayerHead(profile);
 	}
 
@@ -395,5 +401,27 @@ public abstract class NBTUtil {
 
 	public AuthLibProperty wrapProperty(Property property) {
 		return new AuthLibProperty(property.name(), property.value(), property.signature());
+	}
+
+	public Property unwrapProperty(AuthLibProperty property) {
+		return new Property(property.name(), property.value(), property.signature());
+	}
+
+	public UserProfile toUserProfile(GameProfile profile) {
+		UserProfile userProfile = new UserProfile(profile.id(), profile.name());
+		for (Property property : profile.properties().values()) {
+			userProfile.addProperty(wrapProperty(property));
+		}
+		return userProfile;
+	}
+
+	public GameProfile toGameProfile(UserProfile profile) {
+		Multimap<String,Property> pm = HashMultimap.create();
+		for (Map.Entry<String, List<AuthLibProperty>> propEntry : profile.getProperties().entrySet()) {
+			for (AuthLibProperty prop : propEntry.getValue()) {
+				pm.put(prop.name(), unwrapProperty(prop));
+			}
+		}
+		return new GameProfile(profile.getId(), profile.getName(), new PropertyMap(pm));
 	}
 }

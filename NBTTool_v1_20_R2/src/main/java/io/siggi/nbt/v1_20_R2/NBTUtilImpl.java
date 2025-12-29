@@ -24,12 +24,19 @@
 package io.siggi.nbt.v1_20_R2;
 
 import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.properties.Property;
+import com.mojang.authlib.properties.PropertyMap;
 import io.siggi.nbt.NBTCompound;
 import io.siggi.nbt.NBTList;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.serialization.Dynamic;
+import io.siggi.nbt.util.AuthLibProperty;
 import io.siggi.nbt.util.NBTUtil;
+
+import java.util.List;
 import java.util.Map;
+
+import io.siggi.nbt.util.UserProfile;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.DynamicOpsNBT;
 import net.minecraft.nbt.NBTCompressedStreamTools;
@@ -256,5 +263,26 @@ final class NBTUtilImpl extends NBTUtil {
 	public NBTCompound deserialize(InputStream in) throws IOException {
 		DataInputStream dataIn = in instanceof DataInputStream ? ((DataInputStream) in) : new DataInputStream(in);
 		return wrapCompound(NBTCompressedStreamTools.a((DataInput) dataIn));
+	}
+
+	@Override
+	public UserProfile toUserProfile(GameProfile profile) {
+		UserProfile userProfile = new UserProfile(profile.getId(), profile.getName());
+		for (Property property : profile.getProperties().values()) {
+			userProfile.addProperty(wrapProperty(property));
+		}
+		return userProfile;
+	}
+
+	@Override
+	public GameProfile toGameProfile(UserProfile profile) {
+		GameProfile gp = new GameProfile(profile.getId(), profile.getName());
+		PropertyMap pm = gp.getProperties();
+		for (Map.Entry<String, List<AuthLibProperty>> propEntry : profile.getProperties().entrySet()) {
+			for (AuthLibProperty prop : propEntry.getValue()) {
+				pm.put(prop.name(), unwrapProperty(prop));
+			}
+		}
+		return gp;
 	}
 }
